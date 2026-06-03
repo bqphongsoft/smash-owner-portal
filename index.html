@@ -1,0 +1,544 @@
+
+<style>
+h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+*{box-sizing:border-box;margin:0;padding:0}
+
+.portal{background:var(--color-background-tertiary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);overflow:hidden;font-family:var(--font-sans)}
+
+.topbar{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:0 16px;display:flex;align-items:center;gap:10px;height:48px;flex-shrink:0}
+.logo{font-size:14px;font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:7px}
+.logo-dot{width:7px;height:7px;border-radius:50%;background:#1B7A47}
+.court-name{font-size:12px;color:var(--color-text-secondary);border-left:0.5px solid var(--color-border-tertiary);padding-left:10px;margin-left:2px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:7px}
+.live-pill{display:flex;align-items:center;gap:4px;background:var(--color-background-success);color:var(--color-text-success);font-size:10px;font-weight:500;padding:3px 8px;border-radius:20px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.icon-btn{width:30px;height:30px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--color-text-secondary)}
+.icon-btn:hover{background:var(--color-background-secondary)}
+.avatar{width:28px;height:28px;border-radius:50%;background:var(--color-background-success);color:var(--color-text-success);font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;cursor:pointer}
+
+.body-layout{display:flex;height:580px}
+
+.sidebar{width:188px;flex-shrink:0;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);padding:10px 6px;display:flex;flex-direction:column;gap:1px;overflow-y:auto}
+.sidebar::-webkit-scrollbar{display:none}
+.nav-group-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-tertiary);padding:10px 8px 4px;margin-top:2px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:var(--border-radius-md);cursor:pointer;font-size:12px;color:var(--color-text-secondary);transition:background .1s;white-space:nowrap}
+.nav-item:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+.nav-item.active{background:var(--color-background-success);color:var(--color-text-success)}
+.nav-item i{font-size:15px;width:15px;flex-shrink:0}
+.nav-badge{font-size:10px;background:var(--color-background-warning);color:var(--color-text-warning);padding:1px 6px;border-radius:20px;margin-left:auto}
+.nav-badge.pro{background:var(--color-background-info);color:var(--color-text-info)}
+
+.main{flex:1;overflow-y:auto;padding:16px;min-width:0}
+.main::-webkit-scrollbar{width:4px}
+.main::-webkit-scrollbar-track{background:transparent}
+.main::-webkit-scrollbar-thumb{background:var(--color-border-secondary);border-radius:2px}
+
+.page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.page-title{font-size:15px;font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:7px}
+.page-title i{font-size:16px;color:var(--color-text-secondary)}
+.page-actions{display:flex;gap:6px}
+.btn{font-size:11px;padding:6px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);cursor:pointer;color:var(--color-text-primary);display:flex;align-items:center;gap:5px;font-family:var(--font-sans)}
+.btn:hover{background:var(--color-background-secondary)}
+.btn.primary{background:var(--color-background-success);color:var(--color-text-success);border-color:var(--color-border-success)}
+.btn i{font-size:13px}
+
+.panel{display:none}.panel.active{display:block}
+
+.metric-grid{display:grid;gap:8px;margin-bottom:12px}
+.mg4{grid-template-columns:repeat(4,1fr)}
+.mg3{grid-template-columns:repeat(3,1fr)}
+.mg2{grid-template-columns:repeat(2,1fr)}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px 12px}
+.met-label{font-size:10px;color:var(--color-text-tertiary);margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.met-label i{font-size:11px}
+.met-val{font-size:19px;font-weight:500;color:var(--color-text-primary);font-family:var(--font-mono);line-height:1;margin-bottom:3px}
+.met-note{font-size:10px;color:var(--color-text-secondary)}
+.met-up{font-size:10px;color:var(--color-text-success)}
+.met-down{font-size:10px;color:var(--color-text-danger)}
+
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px;margin-bottom:10px}
+.card:last-child{margin-bottom:0}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.card-title{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.card-link{font-size:11px;color:var(--color-text-info);cursor:pointer}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+
+.row{display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.row:last-child{border-bottom:none}
+.av{width:26px;height:26px;border-radius:50%;font-size:10px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.av-g{background:var(--color-background-success);color:var(--color-text-success)}
+.av-b{background:var(--color-background-info);color:var(--color-text-info)}
+.av-a{background:var(--color-background-warning);color:var(--color-text-warning)}
+.av-r{background:var(--color-background-danger);color:var(--color-text-danger)}
+.row-info{flex:1;min-width:0}
+.row-main{font-size:12px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row-sub{font-size:10px;color:var(--color-text-secondary)}
+.tag{font-size:10px;padding:2px 6px;border-radius:20px;flex-shrink:0}
+.tag-g{background:var(--color-background-success);color:var(--color-text-success)}
+.tag-a{background:var(--color-background-warning);color:var(--color-text-warning)}
+.tag-r{background:var(--color-background-danger);color:var(--color-text-danger)}
+.tag-b{background:var(--color-background-info);color:var(--color-text-info)}
+.tag-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.row-val{font-size:11px;font-weight:500;font-family:var(--font-mono);color:var(--color-text-primary);flex-shrink:0}
+
+.cal-wrap{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:10px}
+.cal-header-row{display:flex;background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary)}
+.cal-th{flex:1;text-align:center;padding:6px 3px;font-size:10px;color:var(--color-text-secondary);border-right:0.5px solid var(--color-border-tertiary)}
+.cal-th:last-child{border-right:none}
+.cal-th.today{color:var(--color-text-success);font-weight:500}
+.cal-time-col{width:46px;flex-shrink:0;padding:5px 6px;font-size:10px;color:var(--color-text-tertiary);border-right:0.5px solid var(--color-border-tertiary);font-family:var(--font-mono);display:flex;align-items:center}
+.cal-row-g{display:flex;border-bottom:0.5px solid var(--color-border-tertiary)}
+.cal-row-g:last-child{border-bottom:none}
+.cal-cell{flex:1;padding:2px 2px;border-right:0.5px solid var(--color-border-tertiary);min-height:32px}
+.cal-cell:last-child{border-right:none}
+.slot{border-radius:3px;padding:2px 4px;font-size:9px;font-weight:500;line-height:1.3;cursor:pointer;height:100%;display:flex;flex-direction:column;justify-content:center}
+.s-app{background:var(--color-background-success);color:var(--color-text-success)}
+.s-walk{background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary)}
+.s-peak{background:var(--color-background-warning);color:var(--color-text-warning)}
+.s-free{border:0.5px dashed var(--color-border-tertiary);color:var(--color-text-tertiary);align-items:center;font-size:12px}
+.s-blocked{background:var(--color-background-danger);color:var(--color-text-danger)}
+
+.legend-row{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.leg{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--color-text-secondary)}
+.leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+
+.bar-r{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.bar-label{font-size:11px;color:var(--color-text-secondary);width:55px;flex-shrink:0}
+.bar-track{flex:1;height:5px;background:var(--color-background-secondary);border-radius:10px;overflow:hidden}
+.bar-fill{height:5px;border-radius:10px}
+.bf-g{background:var(--color-text-success)}
+.bf-b{background:#378ADD}
+.bf-a{background:#EF9F27}
+.bar-v{font-size:10px;font-weight:500;font-family:var(--font-mono);color:var(--color-text-primary);min-width:36px;text-align:right}
+
+.heatmap{display:grid;grid-template-columns:32px repeat(7,1fr);gap:2px;margin-bottom:8px}
+.hm-h{font-size:9px;color:var(--color-text-tertiary);text-align:center;padding:2px}
+.hm-l{font-size:9px;color:var(--color-text-tertiary);display:flex;align-items:center;font-family:var(--font-mono)}
+.hm-cell{height:20px;border-radius:2px}
+.hm0{background:var(--color-background-secondary)}
+.hm1{background:#C0DD97}.hm2{background:#97C459}.hm3{background:#639922}.hm4{background:#3B6D11}
+
+.price-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.price-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px}
+.price-lbl{font-size:10px;color:var(--color-text-tertiary);margin-bottom:4px;display:flex;align-items:center;gap:4px}
+.price-lbl i{font-size:11px}
+.price-val{font-size:16px;font-weight:500;font-family:var(--font-mono);color:var(--color-text-primary);margin-bottom:2px}
+.price-hrs{font-size:10px;color:var(--color-text-secondary);margin-bottom:6px}
+.price-inp{display:flex;gap:5px;align-items:center}
+.price-inp input{flex:1;font-size:11px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:4px 7px;background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-mono)}
+
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.toggle-row:last-child{border-bottom:none}
+.toggle-info{}
+.tg-label{font-size:12px;color:var(--color-text-primary)}
+.tg-desc{font-size:10px;color:var(--color-text-secondary);margin-top:1px}
+.toggle{width:32px;height:18px;border-radius:9px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);position:relative;cursor:pointer;flex-shrink:0;transition:background .15s}
+.toggle.on{background:var(--color-text-success);border-color:var(--color-border-success)}
+.toggle-knob{width:12px;height:12px;border-radius:50%;background:var(--color-background-primary);position:absolute;top:2px;left:2px;transition:transform .15s;pointer-events:none}
+.toggle.on .toggle-knob{transform:translateX(14px)}
+
+.inp{width:100%;font-size:12px;padding:7px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);margin-bottom:7px;font-family:var(--font-sans)}
+.inp-lbl{font-size:10px;color:var(--color-text-secondary);margin-bottom:3px}
+.inp-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px}
+select.inp{cursor:pointer}
+
+.promo-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:10px 12px;margin-bottom:7px;display:flex;gap:10px;align-items:flex-start}
+.promo-ico{width:32px;height:32px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.promo-body{flex:1}
+.promo-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.promo-det{font-size:10px;color:var(--color-text-secondary)}
+
+.review-item{padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.review-item:last-child{border-bottom:none}
+.review-header{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.stars{font-size:11px;color:#EF9F27}
+.review-name{font-size:11px;font-weight:500;color:var(--color-text-primary)}
+.review-date{font-size:10px;color:var(--color-text-tertiary);margin-left:auto}
+.review-text{font-size:11px;color:var(--color-text-secondary);line-height:1.5}
+.review-court{font-size:10px;color:var(--color-text-tertiary);margin-top:2px}
+
+.kv-sync-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.kv-sync-row:last-child{border-bottom:none}
+.kv-ico{width:26px;height:26px;border-radius:var(--border-radius-md);background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.kv-info{flex:1}
+.kv-main{font-size:11px;font-weight:500;color:var(--color-text-primary)}
+.kv-sub{font-size:10px;color:var(--color-text-secondary)}
+.kv-t{font-size:10px;font-family:var(--font-mono);color:var(--color-text-tertiary)}
+
+.notif-item{display:flex;gap:8px;align-items:flex-start;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.notif-item:last-child{border-bottom:none}
+.nd{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.notif-body{flex:1}
+.notif-title{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.notif-sub{font-size:10px;color:var(--color-text-secondary);margin-top:2px;line-height:1.4}
+.notif-time{font-size:10px;font-family:var(--font-mono);color:var(--color-text-tertiary);flex-shrink:0}
+
+.kv-banner{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.kv-badge{background:var(--color-background-success);color:var(--color-text-success);font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px}
+</style>
+
+<h2 class="sr-only">Smash owner portal — giao diện thống nhất với sidebar navigation cho tất cả 8 màn hình quản lý sân</h2>
+
+<div class="portal">
+
+  <div class="topbar">
+    <div class="logo"><div class="logo-dot"></div>Smash</div>
+    <span class="court-name">CLB Phú Mỹ Hưng</span>
+    <div class="topbar-right">
+      <div class="live-pill"><div class="live-dot"></div>Live</div>
+      <div class="icon-btn" aria-label="Thông báo"><i class="ti ti-bell" aria-hidden="true"></i></div>
+      <div class="icon-btn" aria-label="Cài đặt"><i class="ti ti-settings" aria-hidden="true"></i></div>
+      <div class="avatar">TH</div>
+    </div>
+  </div>
+
+  <div class="body-layout">
+
+    <div class="sidebar">
+      <div class="nav-item active" onclick="nav('dashboard',this)"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>Tổng quan</div>
+      <div class="nav-item" onclick="nav('calendar',this)"><i class="ti ti-calendar" aria-hidden="true"></i>Lịch sân</div>
+      <div class="nav-item" onclick="nav('bookings',this)"><i class="ti ti-clipboard-list" aria-hidden="true"></i>Đặt sân<span class="nav-badge">3</span></div>
+      <div class="nav-group-label">Phân tích</div>
+      <div class="nav-item" onclick="nav('revenue',this)"><i class="ti ti-chart-bar" aria-hidden="true"></i>Doanh thu</div>
+      <div class="nav-item" onclick="nav('customers',this)"><i class="ti ti-users" aria-hidden="true"></i>Khách hàng</div>
+      <div class="nav-item" onclick="nav('reviews',this)"><i class="ti ti-star" aria-hidden="true"></i>Đánh giá<span class="nav-badge" style="background:var(--color-background-danger);color:var(--color-text-danger)">1</span></div>
+      <div class="nav-group-label">Vận hành</div>
+      <div class="nav-item" onclick="nav('pricing',this)"><i class="ti ti-tag" aria-hidden="true"></i>Giá & ưu đãi</div>
+      <div class="nav-item" onclick="nav('promo',this)"><i class="ti ti-speakerphone" aria-hidden="true"></i>Khuyến mãi<span class="nav-badge pro">Pro</span></div>
+      <div class="nav-item" onclick="nav('kiotviet',this)"><i class="ti ti-refresh" aria-hidden="true"></i>KiotViet sync</div>
+      <div class="nav-item" onclick="nav('notifications',this)"><i class="ti ti-bell" aria-hidden="true"></i>Thông báo</div>
+      <div class="nav-group-label">Hệ thống</div>
+      <div class="nav-item" onclick="nav('settings',this)"><i class="ti ti-building" aria-hidden="true"></i>Cài đặt sân</div>
+    </div>
+
+    <div class="main">
+
+      <!-- TỔNG QUAN -->
+      <div id="p-dashboard" class="panel active">
+        <div class="page-head">
+          <div class="page-title"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>Tổng quan</div>
+          <div class="page-actions">
+            <button class="btn primary" onclick="nav('calendar',document.querySelector('[onclick*=calendar]'))"><i class="ti ti-plus" aria-hidden="true"></i>Thêm bộ hành</button>
+          </div>
+        </div>
+        <div class="kv-banner">
+          <i class="ti ti-refresh" aria-hidden="true" style="font-size:15px;color:var(--color-text-secondary)"></i>
+          <div style="flex:1"><div style="font-size:11px;font-weight:500;color:var(--color-text-primary)">KiotViet — 3 lịch bộ hành vừa cập nhật</div><div style="font-size:10px;color:var(--color-text-secondary)">Sân A2 08:00 · B1 17:00 · B2 18:00</div></div>
+          <div style="font-size:10px;font-family:var(--font-mono);color:var(--color-text-tertiary)">08:47</div>
+          <div class="kv-badge">Sync</div>
+        </div>
+        <div class="metric-grid mg4">
+          <div class="met"><div class="met-label"><i class="ti ti-calendar-check" aria-hidden="true"></i>Booking hôm nay</div><div class="met-val">17</div><div class="met-up">↑ 4 so hôm qua</div></div>
+          <div class="met"><div class="met-label"><i class="ti ti-cash" aria-hidden="true"></i>Doanh thu</div><div class="met-val">1.19M</div><div class="met-up">↑ 12%</div></div>
+          <div class="met"><div class="met-label"><i class="ti ti-layout-grid" aria-hidden="true"></i>Lấp đầy</div><div class="met-val">78%</div><div class="met-note">4 sân · hôm nay</div></div>
+          <div class="met"><div class="met-label"><i class="ti ti-clock" aria-hidden="true"></i>Sân trống</div><div class="met-val">3</div><div class="met-down">giờ vàng · 2h nữa</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-head"><span class="card-title">Booking mới nhất</span><span class="card-link" onclick="nav('bookings',document.querySelector('[onclick*=bookings]'))">Xem tất cả</span></div>
+            <div class="row"><div class="av av-g">MT</div><div class="row-info"><div class="row-main">Minh Tuấn · Sân A1</div><div class="row-sub">06:00–07:00 · MoMo</div></div><div class="tag tag-g">Đã TT</div></div>
+            <div class="row"><div class="av av-b">LP</div><div class="row-info"><div class="row-main">Lan Phương · Sân A1</div><div class="row-sub">07:00–08:00 · MoMo</div></div><div class="tag tag-g">Đã TT</div></div>
+            <div class="row"><div class="av av-a">VH</div><div class="row-info"><div class="row-main">Việt Hùng · Sân A1</div><div class="row-sub">17:00–18:00 · Chờ TT</div></div><div class="tag tag-a">Chờ</div></div>
+            <div class="row"><div class="av av-g">DL</div><div class="row-info"><div class="row-main">Dũng Lâm · Sân B1</div><div class="row-sub">19:00–20:00 · ZaloPay</div></div><div class="tag tag-g">Đã TT</div></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><span class="card-title">Doanh thu theo sân</span><span class="card-link" onclick="nav('revenue',document.querySelector('[onclick*=revenue]'))">Chi tiết</span></div>
+            <div class="bar-r"><div class="bar-label">Sân A1</div><div class="bar-track"><div class="bar-fill bf-g" style="width:88%"></div></div><div class="bar-v">390k</div></div>
+            <div class="bar-r"><div class="bar-label">Sân A2</div><div class="bar-track"><div class="bar-fill bf-g" style="width:74%"></div></div><div class="bar-v">325k</div></div>
+            <div class="bar-r"><div class="bar-label">Sân B1</div><div class="bar-track"><div class="bar-fill bf-a" style="width:60%"></div></div><div class="bar-v">260k</div></div>
+            <div class="bar-r"><div class="bar-label">Sân B2</div><div class="bar-track"><div class="bar-fill bf-a" style="width:49%"></div></div><div class="bar-v">215k</div></div>
+            <div style="border-top:0.5px solid var(--color-border-tertiary);margin-top:8px;padding-top:8px;display:flex;justify-content:space-between">
+              <span style="font-size:11px;color:var(--color-text-secondary)">Tổng hôm nay</span>
+              <span style="font-size:13px;font-weight:500;font-family:var(--font-mono);color:var(--color-text-primary)">1.190k</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LỊCH SÂN -->
+      <div id="p-calendar" class="panel">
+        <div class="page-head">
+          <div class="page-title"><i class="ti ti-calendar" aria-hidden="true"></i>Lịch sân — Thứ 6, 25/05</div>
+          <div class="page-actions">
+            <button class="btn"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+            <button class="btn" style="min-width:110px;justify-content:center">25 tháng 5</button>
+            <button class="btn"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+            <button class="btn primary"><i class="ti ti-plus" aria-hidden="true"></i>Thêm bộ hành</button>
+          </div>
+        </div>
+        <div class="legend-row">
+          <div class="leg"><div class="leg-dot" style="background:var(--color-background-success);border:0.5px solid var(--color-border-success)"></div>Smash app</div>
+          <div class="leg"><div class="leg-dot" style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary)"></div>Bộ hành</div>
+          <div class="leg"><div class="leg-dot" style="background:var(--color-background-warning);border:0.5px solid var(--color-border-warning)"></div>Giờ vàng</div>
+          <div class="leg"><div class="leg-dot" style="border:0.5px dashed var(--color-border-tertiary)"></div>Trống</div>
+          <div class="leg"><div class="leg-dot" style="background:var(--color-background-danger);border:0.5px solid var(--color-border-danger)"></div>Khoá</div>
+        </div>
+        <div class="cal-wrap">
+          <div class="cal-header-row">
+            <div style="width:46px;flex-shrink:0;background:var(--color-background-secondary);border-right:0.5px solid var(--color-border-tertiary)"></div>
+            <div class="cal-th today">Sân A1</div>
+            <div class="cal-th">Sân A2</div>
+            <div class="cal-th">Sân B1</div>
+            <div class="cal-th">Sân B2</div>
+          </div>
+          <div class="cal-row-g"><div class="cal-time-col">06:00</div><div class="cal-cell"><div class="slot s-app">Minh T.<br>65k</div></div><div class="cal-cell"><div class="slot s-app">Hùng N.<br>65k</div></div><div class="cal-cell"><div class="slot s-walk">Bộ hành<br>KiotViet</div></div><div class="cal-cell"><div class="slot s-free"><i class="ti ti-plus" aria-hidden="true"></i></div></div></div>
+          <div class="cal-row-g"><div class="cal-time-col">07:00</div><div class="cal-cell"><div class="slot s-app">Lan P.<br>65k</div></div><div class="cal-cell"><div class="slot s-free"><i class="ti ti-plus" aria-hidden="true"></i></div></div><div class="cal-cell"><div class="slot s-app">Tú A.<br>65k</div></div><div class="cal-cell"><div class="slot s-walk">Bộ hành<br>KiotViet</div></div></div>
+          <div class="cal-row-g"><div class="cal-time-col">08:00</div><div class="cal-cell"><div class="slot s-walk">Bộ hành</div></div><div class="cal-cell"><div class="slot s-app">Khoa D.<br>65k</div></div><div class="cal-cell"><div class="slot s-free"><i class="ti ti-plus" aria-hidden="true"></i></div></div><div class="cal-cell"><div class="slot s-free"><i class="ti ti-plus" aria-hidden="true"></i></div></div></div>
+          <div class="cal-row-g"><div class="cal-time-col">17:00</div><div class="cal-cell"><div class="slot s-app">Việt H.<br>80k</div></div><div class="cal-cell"><div class="slot s-app">Nam T.<br>80k</div></div><div class="cal-cell"><div class="slot s-free"><i class="ti ti-plus" aria-hidden="true"></i></div></div><div class="cal-cell"><div class="slot s-walk">Bộ hành</div></div></div>
+          <div class="cal-row-g"><div class="cal-time-col">18:00</div><div class="cal-cell"><div class="slot s-peak">Đặt · peak<br>90k</div></div><div class="cal-cell"><div class="slot s-peak">Đặt · peak<br>90k</div></div><div class="cal-cell"><div class="slot s-peak">Đặt · peak<br>90k</div></div><div class="cal-cell"><div class="slot s-free"><i class="ti ti-plus" aria-hidden="true"></i></div></div></div>
+          <div class="cal-row-g"><div class="cal-time-col">19:00</div><div class="cal-cell"><div class="slot s-peak">Đặt · peak<br>90k</div></div><div class="cal-cell"><div class="slot s-free"><i class="ti ti-plus" aria-hidden="true"></i></div></div><div class="cal-cell"><div class="slot s-app">Dũng L.<br>90k</div></div><div class="cal-cell"><div class="slot s-peak">Đặt · peak<br>90k</div></div></div>
+          <div class="cal-row-g"><div class="cal-time-col">20:00</div><div class="cal-cell"><div class="slot s-blocked">Khoá</div></div><div class="cal-cell"><div class="slot s-app">Bình K.<br>90k</div></div><div class="cal-cell"><div class="slot s-app">Sơn M.<br>90k</div></div><div class="cal-cell"><div class="slot s-app">Duy T.<br>90k</div></div></div>
+        </div>
+      </div>
+
+      <!-- ĐẶT SÂN -->
+      <div id="p-bookings" class="panel">
+        <div class="page-head">
+          <div class="page-title"><i class="ti ti-clipboard-list" aria-hidden="true"></i>Tất cả đặt sân</div>
+          <div class="page-actions">
+            <select style="font-size:11px;padding:5px 8px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);cursor:pointer">
+              <option>Hôm nay</option><option>7 ngày</option><option>Tháng này</option>
+            </select>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Danh sách booking — 25/05</span></div>
+          <div class="row"><div class="av av-g">MT</div><div class="row-info"><div class="row-main">Minh Tuấn · Sân A1 · 06:00–07:00</div><div class="row-sub">Smash app · MoMo · +65 Smash Points</div></div><div class="row-val" style="margin-right:6px">65k</div><div class="tag tag-g">Đã TT</div></div>
+          <div class="row"><div class="av av-b">LP</div><div class="row-info"><div class="row-main">Lan Phương · Sân A1 · 07:00–08:00</div><div class="row-sub">Smash app · MoMo · Thêm: vợt thuê 20k</div></div><div class="row-val" style="margin-right:6px">85k</div><div class="tag tag-g">Đã TT</div></div>
+          <div class="row"><div class="av av-a">VH</div><div class="row-info"><div class="row-main">Việt Hùng · Sân A1 · 17:00–18:00</div><div class="row-sub">Smash app · Chờ thanh toán</div></div><div class="row-val" style="margin-right:6px">80k</div><div class="tag tag-a">Chờ TT</div></div>
+          <div class="row"><div class="av" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">BH</div><div class="row-info"><div class="row-main">Bộ hành · Sân A2 · 08:00–09:00</div><div class="row-sub">KiotViet sync · Tiền mặt</div></div><div class="row-val" style="margin-right:6px">65k</div><div class="tag tag-gray">Bộ hành</div></div>
+          <div class="row"><div class="av av-g">DL</div><div class="row-info"><div class="row-main">Dũng Lâm · Sân B1 · 19:00–20:00</div><div class="row-sub">Smash app · ZaloPay</div></div><div class="row-val" style="margin-right:6px">90k</div><div class="tag tag-g">Đã TT</div></div>
+        </div>
+      </div>
+
+      <!-- DOANH THU -->
+      <div id="p-revenue" class="panel">
+        <div class="page-head">
+          <div class="page-title"><i class="ti ti-chart-bar" aria-hidden="true"></i>Báo cáo doanh thu</div>
+          <div class="page-actions">
+            <button class="btn"><i class="ti ti-download" aria-hidden="true"></i>Xuất Excel</button>
+          </div>
+        </div>
+        <div class="metric-grid mg3">
+          <div class="met"><div class="met-label"><i class="ti ti-calendar-week" aria-hidden="true"></i>Tuần này</div><div class="met-val">6.84M</div><div class="met-up">↑ 18% vs tuần trước</div></div>
+          <div class="met"><div class="met-label"><i class="ti ti-calendar-month" aria-hidden="true"></i>Tháng này</div><div class="met-val">24.6M</div><div class="met-up">↑ 9% vs tháng trước</div></div>
+          <div class="met"><div class="met-label"><i class="ti ti-device-mobile" aria-hidden="true"></i>Qua Smash app</div><div class="met-val">66%</div><div class="met-note">16.2M / 24.6M tổng</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-head"><span class="card-title">Doanh thu theo khung giờ</span></div>
+            <div class="bar-r"><div class="bar-label">05–08h</div><div class="bar-track"><div class="bar-fill bf-b" style="width:45%"></div></div><div class="bar-v">4.2M</div></div>
+            <div class="bar-r"><div class="bar-label">08–12h</div><div class="bar-track"><div class="bar-fill bf-b" style="width:30%"></div></div><div class="bar-v">2.8M</div></div>
+            <div class="bar-r"><div class="bar-label">12–17h</div><div class="bar-track"><div class="bar-fill bf-b" style="width:20%"></div></div><div class="bar-v">1.9M</div></div>
+            <div class="bar-r"><div class="bar-label">17–22h</div><div class="bar-track"><div class="bar-fill bf-g" style="width:100%"></div></div><div class="bar-v">9.3M</div></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><span class="card-title">Tỷ lệ lấp đầy từng sân</span></div>
+            <div class="bar-r"><div class="bar-label">Sân A1</div><div class="bar-track"><div class="bar-fill bf-g" style="width:88%"></div></div><div class="bar-v">88%</div></div>
+            <div class="bar-r"><div class="bar-label">Sân A2</div><div class="bar-track"><div class="bar-fill bf-g" style="width:76%"></div></div><div class="bar-v">76%</div></div>
+            <div class="bar-r"><div class="bar-label">Sân B1</div><div class="bar-track"><div class="bar-fill bf-a" style="width:62%"></div></div><div class="bar-v">62%</div></div>
+            <div class="bar-r"><div class="bar-label">Sân B2</div><div class="bar-track"><div class="bar-fill bf-a" style="width:54%"></div></div><div class="bar-v">54%</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Heatmap giờ đắt khách trong tuần</span></div>
+          <div class="heatmap">
+            <div class="hm-h"></div><div class="hm-h">T2</div><div class="hm-h">T3</div><div class="hm-h">T4</div><div class="hm-h">T5</div><div class="hm-h">T6</div><div class="hm-h">T7</div><div class="hm-h">CN</div>
+            <div class="hm-l">06h</div><div class="hm-cell hm2"></div><div class="hm-cell hm2"></div><div class="hm-cell hm1"></div><div class="hm-cell hm2"></div><div class="hm-cell hm3"></div><div class="hm-cell hm4"></div><div class="hm-cell hm4"></div>
+            <div class="hm-l">09h</div><div class="hm-cell hm1"></div><div class="hm-cell hm0"></div><div class="hm-cell hm1"></div><div class="hm-cell hm0"></div><div class="hm-cell hm1"></div><div class="hm-cell hm2"></div><div class="hm-cell hm3"></div>
+            <div class="hm-l">13h</div><div class="hm-cell hm0"></div><div class="hm-cell hm0"></div><div class="hm-cell hm0"></div><div class="hm-cell hm1"></div><div class="hm-cell hm0"></div><div class="hm-cell hm1"></div><div class="hm-cell hm2"></div>
+            <div class="hm-l">18h</div><div class="hm-cell hm4"></div><div class="hm-cell hm4"></div><div class="hm-cell hm3"></div><div class="hm-cell hm4"></div><div class="hm-cell hm4"></div><div class="hm-cell hm4"></div><div class="hm-cell hm4"></div>
+            <div class="hm-l">20h</div><div class="hm-cell hm3"></div><div class="hm-cell hm3"></div><div class="hm-cell hm4"></div><div class="hm-cell hm3"></div><div class="hm-cell hm4"></div><div class="hm-cell hm3"></div><div class="hm-cell hm4"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--color-text-tertiary)">
+            <div class="hm-cell hm0" style="width:12px;height:12px;border-radius:2px;flex-shrink:0"></div>Thấp
+            <div class="hm-cell hm1" style="width:12px;height:12px;border-radius:2px;flex-shrink:0;margin-left:3px"></div>
+            <div class="hm-cell hm2" style="width:12px;height:12px;border-radius:2px;flex-shrink:0"></div>
+            <div class="hm-cell hm3" style="width:12px;height:12px;border-radius:2px;flex-shrink:0"></div>
+            <div class="hm-cell hm4" style="width:12px;height:12px;border-radius:2px;flex-shrink:0"></div>Cao
+          </div>
+        </div>
+      </div>
+
+      <!-- KHÁCH HÀNG -->
+      <div id="p-customers" class="panel">
+        <div class="page-head">
+          <div class="page-title"><i class="ti ti-users" aria-hidden="true"></i>Khách hàng</div>
+        </div>
+        <div class="metric-grid mg3">
+          <div class="met"><div class="met-label"><i class="ti ti-users" aria-hidden="true"></i>Tổng khách</div><div class="met-val">284</div><div class="met-up">↑ 23 tháng này</div></div>
+          <div class="met"><div class="met-label"><i class="ti ti-repeat" aria-hidden="true"></i>Quay lại</div><div class="met-val">61%</div><div class="met-up">↑ tốt</div></div>
+          <div class="met"><div class="met-label"><i class="ti ti-star" aria-hidden="true"></i>Khách VIP</div><div class="met-val">48</div><div class="met-note">≥5 buổi/tháng</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-head"><span class="card-title">Top khách tháng này</span></div>
+            <div class="row"><div class="av av-g">MT</div><div class="row-info"><div class="row-main">Minh Tuấn</div><div class="row-sub">12 buổi · Sân A1 sáng T3, T5</div></div><div class="row-val" style="margin-right:6px">780k</div><div class="tag tag-g">VIP</div></div>
+            <div class="row"><div class="av av-b">LP</div><div class="row-info"><div class="row-main">Lan Phương</div><div class="row-sub">9 buổi · Hay đặt giờ vàng</div></div><div class="row-val" style="margin-right:6px">810k</div><div class="tag tag-g">VIP</div></div>
+            <div class="row"><div class="av av-a">DL</div><div class="row-info"><div class="row-main">Dũng Lâm</div><div class="row-sub">7 buổi · Nhóm 4 người</div></div><div class="row-val" style="margin-right:6px">630k</div><div class="tag tag-b">Thân</div></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><span class="card-title" style="color:var(--color-text-danger)">Cần chú ý — chưa đặt lâu</span></div>
+            <div class="row"><div class="av av-r">KH</div><div class="row-info"><div class="row-main">Khoa Hùng</div><div class="row-sub">Chưa đặt 3 tuần · từng đặt mỗi tuần</div></div><button class="btn" style="font-size:10px;padding:4px 8px">Gửi ưu đãi</button></div>
+            <div class="row"><div class="av av-r">BT</div><div class="row-info"><div class="row-main">Bình Thành</div><div class="row-sub">Chưa đặt 4 tuần · từng là VIP</div></div><button class="btn" style="font-size:10px;padding:4px 8px">Gửi ưu đãi</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ĐÁNH GIÁ -->
+      <div id="p-reviews" class="panel">
+        <div class="page-head">
+          <div class="page-title"><i class="ti ti-star" aria-hidden="true"></i>Đánh giá từ người chơi</div>
+        </div>
+        <div class="metric-grid mg3">
+          <div class="met"><div class="met-label"><i class="ti ti-star" aria-hidden="true"></i>Điểm TB</div><div class="met-val">4.8</div><div class="met-note">/ 5.0 · 147 đánh giá</div></div>
+          <div class="met"><div class="met-label"><i class="ti ti-mood-happy" aria-hidden="true"></i>5 sao</div><div class="met-val">78%</div><div class="met-up">115 lượt</div></div>
+          <div class="met"><div class="met-label"><i class="ti ti-mood-sad" aria-hidden="true"></i>Dưới 3 sao</div><div class="met-val">4%</div><div class="met-down">Cần xem lại</div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Đánh giá gần nhất</span></div>
+          <div class="review-item"><div class="review-header"><div class="stars">★★★★★</div><div class="review-name">Minh Tuấn</div><div class="review-date">hôm nay</div></div><div class="review-text">Sân sạch, đặt qua app rất tiện, xác nhận ngay qua Zalo. Sẽ tiếp tục ủng hộ!</div><div class="review-court">Sân A1 · 07:00 · 25/05</div></div>
+          <div class="review-item"><div class="review-header"><div class="stars">★★★★<span style="color:var(--color-text-tertiary)">★</span></div><div class="review-name">Lan Phương</div><div class="review-date">hôm qua</div></div><div class="review-text">Sân chất lượng, máy lạnh mát. Chỉ tiếc giờ vàng hay hết slot sớm.</div><div class="review-court">Sân B1 · 18:00 · 24/05</div></div>
+          <div class="review-item" style="border-left:2px solid var(--color-border-danger);padding-left:8px;border-radius:0"><div class="review-header"><div class="stars"><span style="color:#E24B4A">★★★</span><span style="color:var(--color-text-tertiary)">★★</span></div><div class="review-name">Ẩn danh</div><div class="review-date">3 ngày trước</div></div><div class="review-text">Đặt sân A2 8h nhưng khi đến đã có người. Nhân viên xử lý ổn nhưng mất thời gian chờ đổi sân.</div><div class="review-court">Sân A2 · 08:00 · 22/05</div><button class="btn" style="margin-top:6px;font-size:10px;padding:4px 8px">Phản hồi đánh giá</button></div>
+        </div>
+      </div>
+
+      <!-- GIÁ & ƯU ĐÃI -->
+      <div id="p-pricing" class="panel">
+        <div class="page-head">
+          <div class="page-title"><i class="ti ti-tag" aria-hidden="true"></i>Giá & ưu đãi</div>
+          <div class="page-actions"><button class="btn primary"><i class="ti ti-device-floppy" aria-hidden="true"></i>Lưu thay đổi</button></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Khung giá theo giờ</span></div>
+          <div class="price-grid">
+            <div class="price-card"><div class="price-lbl"><i class="ti ti-sun" aria-hidden="true"></i>Giờ thường · T2–T6</div><div class="price-val">65.000đ</div><div class="price-hrs">05:00–17:00</div><div class="price-inp"><input type="number" value="65000"><button class="btn" style="font-size:10px;padding:4px 8px">Lưu</button></div></div>
+            <div class="price-card"><div class="price-lbl"><i class="ti ti-sunset" aria-hidden="true"></i>Giờ vàng · T2–T6</div><div class="price-val">90.000đ</div><div class="price-hrs">17:00–22:00</div><div class="price-inp"><input type="number" value="90000"><button class="btn" style="font-size:10px;padding:4px 8px">Lưu</button></div></div>
+            <div class="price-card"><div class="price-lbl"><i class="ti ti-calendar-week" aria-hidden="true"></i>Cuối tuần · Sáng</div><div class="price-val">80.000đ</div><div class="price-hrs">05:00–12:00 · T7–CN</div><div class="price-inp"><input type="number" value="80000"><button class="btn" style="font-size:10px;padding:4px 8px">Lưu</button></div></div>
+            <div class="price-card"><div class="price-lbl"><i class="ti ti-calendar-week" aria-hidden="true"></i>Cuối tuần · Tối</div><div class="price-val">95.000đ</div><div class="price-hrs">12:00–22:00 · T7–CN</div><div class="price-inp"><input type="number" value="95000"><button class="btn" style="font-size:10px;padding:4px 8px">Lưu</button></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Tự động giảm giờ thấp điểm</span><span class="nav-badge pro" style="font-size:10px;padding:2px 8px">Pro</span></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="tg-label">Bật giảm giá tự động</div><div class="tg-desc">Slot trống trước 2h → tự động giảm % đã cài</div></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="tg-label">Thông báo đến khách đã đặt trước</div><div class="tg-desc">Gửi Zalo ZNS khi có slot giảm giá</div></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        </div>
+      </div>
+
+      <!-- KHUYẾN MÃI -->
+      <div id="p-promo" class="panel">
+        <div class="page-head">
+          <div class="page-title"><i class="ti ti-speakerphone" aria-hidden="true"></i>Khuyến mãi</div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-head"><span class="card-title">Tạo khuyến mãi mới</span></div>
+            <div class="inp-lbl">Tên chương trình</div>
+            <input class="inp" type="text" placeholder="VD: Ưu đãi sáng T2 – giảm 20%">
+            <div class="inp-row">
+              <div><div class="inp-lbl">Giảm (%)</div><input class="inp" type="number" placeholder="20" style="margin:0"></div>
+              <div><div class="inp-lbl">Đến ngày</div><input class="inp" type="date" style="margin:0"></div>
+            </div>
+            <div class="inp-lbl">Gửi đến</div>
+            <select class="inp"><option>Tất cả khách đã đặt sân</option><option>Chỉ khách VIP</option><option>Khách chưa đặt 2 tuần</option></select>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--color-text-secondary);margin-bottom:8px"><span>Tiếp cận: <strong style="color:var(--color-text-primary)">147 người</strong></span><span>Zalo ZNS</span></div>
+            <button class="btn primary" style="width:100%;justify-content:center"><i class="ti ti-send" aria-hidden="true"></i>Gửi khuyến mãi</button>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Đang hoạt động</div>
+            <div class="promo-card"><div class="promo-ico" style="background:var(--color-background-success)"><i class="ti ti-percentage" aria-hidden="true" style="color:var(--color-text-success)"></i></div><div class="promo-body"><div class="promo-title">Giảm 15% buổi sáng T2–T4</div><div class="promo-det">Còn 8 ngày · Đã gửi 89 · 23 đặt sân</div></div><div class="tag tag-g">Live</div></div>
+            <div class="promo-card"><div class="promo-ico" style="background:var(--color-background-info)"><i class="ti ti-clock" aria-hidden="true" style="color:var(--color-text-info)"></i></div><div class="promo-body"><div class="promo-title">Flash deal 18h hôm nay</div><div class="promo-det">Giảm 25% · Tự tắt lúc 17:30</div></div><div class="tag tag-a">Đang gửi</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KIOTVIET -->
+      <div id="p-kiotviet" class="panel">
+        <div class="page-head">
+          <div class="page-title"><i class="ti ti-refresh" aria-hidden="true"></i>KiotViet sync</div>
+          <div class="page-actions"><button class="btn primary"><i class="ti ti-refresh" aria-hidden="true"></i>Sync ngay</button></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Kết nối</span><div class="tag tag-g">Đã kết nối</div></div>
+          <div class="row"><div class="av" style="background:var(--color-background-secondary);color:var(--color-text-secondary);border-radius:var(--border-radius-md)"><i class="ti ti-building-store" aria-hidden="true" style="font-size:14px"></i></div><div class="row-info"><div class="row-main">CLB Phú Mỹ Hưng · ID: KV-00421</div><div class="row-sub">Kết nối từ 01/05/2025</div></div><button class="btn" style="color:var(--color-text-danger);border-color:var(--color-border-danger);font-size:10px">Ngắt kết nối</button></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Cấu hình đồng bộ</span></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="tg-label">Tự động sync mỗi 5 phút</div><div class="tg-desc">Kéo lịch bộ hành từ KiotViet vào Smash</div></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="tg-label">Two-way sync <span class="nav-badge pro" style="font-size:9px">Pro</span></div><div class="tg-desc">Ghi booking Smash ngược vào KiotViet</div></div><div class="toggle" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="tg-label">Cảnh báo double-booking</div><div class="tg-desc">Push ngay khi phát hiện conflict</div></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Lịch sử sync gần đây</span></div>
+          <div class="kv-sync-row"><div class="kv-ico"><i class="ti ti-check" aria-hidden="true" style="color:var(--color-text-success)"></i></div><div class="kv-info"><div class="kv-main">Thành công · 3 booking bộ hành mới</div><div class="kv-sub">Sân A2 08:00, B1 17:00, B2 18:00</div></div><div class="kv-t">08:47</div></div>
+          <div class="kv-sync-row"><div class="kv-ico"><i class="ti ti-check" aria-hidden="true" style="color:var(--color-text-success)"></i></div><div class="kv-info"><div class="kv-main">Thành công · Không có thay đổi</div><div class="kv-sub">—</div></div><div class="kv-t">08:42</div></div>
+          <div class="kv-sync-row"><div class="kv-ico"><i class="ti ti-alert-triangle" aria-hidden="true" style="color:var(--color-text-warning)"></i></div><div class="kv-info"><div class="kv-main">Conflict phát hiện · Sân A1 07:00</div><div class="kv-sub">Đã tự giải quyết — Smash booking ưu tiên</div></div><div class="kv-t">07:15</div></div>
+        </div>
+      </div>
+
+      <!-- THÔNG BÁO -->
+      <div id="p-notifications" class="panel">
+        <div class="page-head">
+          <div class="page-title"><i class="ti ti-bell" aria-hidden="true"></i>Thông báo</div>
+          <div class="page-actions"><button class="btn">Đánh dấu đã đọc</button></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Hôm nay</span></div>
+          <div class="notif-item"><div class="nd" style="background:var(--color-text-success)"></div><div class="notif-body"><div class="notif-title">Booking mới · Sân A1 · 19:00</div><div class="notif-sub">Dũng Lâm · 90.000đ · Đã thanh toán ZaloPay</div></div><div class="notif-time">08:51</div></div>
+          <div class="notif-item"><div class="nd" style="background:var(--color-text-warning)"></div><div class="notif-body"><div class="notif-title">Sân B2 18:00 còn trống — giờ vàng</div><div class="notif-sub">Còn 9 tiếng · Bật flash deal để lấp đầy?</div></div><div class="notif-time">08:30</div></div>
+          <div class="notif-item"><div class="nd" style="background:var(--color-text-info)"></div><div class="notif-body"><div class="notif-title">KiotViet sync · 3 booking bộ hành mới</div><div class="notif-sub">Sân A2 08:00, B1 17:00, B2 18:00</div></div><div class="notif-time">08:47</div></div>
+          <div class="notif-item"><div class="nd" style="background:var(--color-text-danger)"></div><div class="notif-body"><div class="notif-title">Đánh giá 3 sao — cần phản hồi</div><div class="notif-sub">"Đặt sân A2 nhưng khi đến đã có người..." · Ẩn danh</div></div><div class="notif-time">07:20</div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Cài đặt thông báo</span></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="tg-label">Booking mới qua app</div><div class="tg-desc">Nhận ngay khi có đặt sân online</div></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="tg-label">Sân trống giờ vàng</div><div class="tg-desc">Nhắc khi giờ vàng chưa đầy slot</div></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="tg-label">Báo cáo cuối ngày qua Zalo</div><div class="tg-desc">Tóm tắt doanh thu lúc 22:00 mỗi ngày</div></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        </div>
+      </div>
+
+      <!-- CÀI ĐẶT SÂN -->
+      <div id="p-settings" class="panel">
+        <div class="page-head">
+          <div class="page-title"><i class="ti ti-building" aria-hidden="true"></i>Cài đặt sân</div>
+          <div class="page-actions"><button class="btn primary"><i class="ti ti-device-floppy" aria-hidden="true"></i>Lưu</button></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-head"><span class="card-title">Thông tin cơ bản</span><span class="card-link">Chỉnh sửa</span></div>
+            <div class="row"><div class="row-info"><div class="row-main">Tên sân</div></div><div style="font-size:12px;color:var(--color-text-secondary)">CLB Phú Mỹ Hưng</div></div>
+            <div class="row"><div class="row-info"><div class="row-main">Quận</div></div><div style="font-size:12px;color:var(--color-text-secondary)">Quận 7, TPHCM</div></div>
+            <div class="row"><div class="row-info"><div class="row-main">Số lượng sân</div></div><div style="font-size:12px;color:var(--color-text-secondary)">4 sân</div></div>
+            <div class="row"><div class="row-info"><div class="row-main">Điện thoại</div></div><div style="font-size:12px;color:var(--color-text-secondary)">028 3456 7890</div></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><span class="card-title">Tiện ích</span></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="tg-label">Máy lạnh</div></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="tg-label">Trong nhà</div></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="tg-label">Chỗ để xe</div></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="tg-label">Phòng thay đồ</div></div><div class="toggle" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Smash listing</span></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="tg-label">Hiển thị trên Smash app</div><div class="tg-desc">Người chơi có thể tìm thấy và đặt sân</div></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="tg-label">Cho phép đặt online</div><div class="tg-desc">Nhận booking và thanh toán qua app</div></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="tg-label">Tự xác nhận booking không cần duyệt</div><div class="tg-desc">Tắt nếu muốn confirm thủ công từng booking</div></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function nav(id, el) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const p = document.getElementById('p-' + id);
+  if (p) p.classList.add('active');
+  document.querySelector('.main').scrollTop = 0;
+}
+</script>
