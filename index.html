@@ -327,10 +327,90 @@ select.inp{cursor:pointer}
 .nav-label{transition:opacity .15s}
 .nav-tooltip{display:none;position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%);background:var(--text-primary);color:var(--bg-primary);font-size:11px;font-weight:500;padding:4px 8px;border-radius:6px;white-space:nowrap;z-index:100;pointer-events:none}
 .sidebar.collapsed .nav-item:hover .nav-tooltip{display:block}
+
+/* LOGIN SCREEN */
+.login-screen{position:fixed;inset:0;background:#0b1a12;display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .35s ease}
+.login-screen.hiding{opacity:0;pointer-events:none}
+.login-card{width:360px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.4)}
+.login-header{background:#0b1a12;padding:32px 32px 28px;text-align:center;position:relative}
+.login-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px}
+.login-logo-dot{width:10px;height:10px;border-radius:50%;background:#24a361}
+.login-logo-text{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.5px}
+.login-subtitle{font-size:12px;color:rgba(255,255,255,.45);letter-spacing:.04em}
+.login-body{padding:28px 28px 24px}
+.login-field{margin-bottom:14px}
+.login-field label{display:block;font-size:11px;font-weight:600;color:var(--text-secondary);margin-bottom:5px;letter-spacing:.03em}
+.login-field input{width:100%;font-size:13px;padding:10px 12px;border:1.5px solid var(--border-md);border-radius:var(--r-md);background:var(--bg-secondary);color:var(--text-primary);font-family:var(--font);transition:border-color .15s,background .15s}
+.login-field input:focus{outline:none;border-color:var(--green);background:#fff;box-shadow:0 0 0 3px rgba(27,122,71,.1)}
+.login-field input.error{border-color:#e24b4a;background:#fff9f9}
+.login-error{display:none;align-items:center;gap:6px;background:var(--bg-danger);border:1px solid rgba(153,27,27,.2);border-radius:var(--r-md);padding:8px 12px;font-size:12px;color:var(--text-danger);margin-bottom:14px}
+.login-error.show{display:flex}
+.login-error i{font-size:14px;flex-shrink:0}
+.login-btn{width:100%;padding:11px;border-radius:var(--r-md);border:none;background:var(--green);color:#fff;font-size:13px;font-weight:700;font-family:var(--font);cursor:pointer;transition:background .15s,transform .1s;letter-spacing:.02em}
+.login-btn:hover{background:#155f38}
+.login-btn:active{transform:scale(.98)}
+.login-btn:disabled{background:var(--border-md);cursor:not-allowed;transform:none}
+.login-btn.loading{position:relative;color:transparent}
+.login-btn.loading::after{content:'';position:absolute;top:50%;left:50%;width:16px;height:16px;margin:-8px 0 0 -8px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.login-footer{padding:0 28px 24px;text-align:center;font-size:11px;color:var(--text-tertiary)}
+.login-hint{display:flex;align-items:center;gap:6px;background:var(--bg-secondary);border-radius:var(--r-md);padding:8px 12px;font-size:11px;color:var(--text-tertiary);margin-top:12px;border:1px solid var(--border)}
+.login-hint i{font-size:13px;flex-shrink:0}
+.pw-wrap{position:relative}
+.pw-wrap input{padding-right:38px}
+.pw-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--text-tertiary);padding:2px;transition:color .12s}
+.pw-toggle:hover{color:var(--text-primary)}
+.login-dots{display:flex;gap:4px;justify-content:center;margin-top:20px}
+.login-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.15)}
+.login-dot.active{background:rgba(255,255,255,.5)}
 </style>
 </head>
 <body>
-<div class="portal">
+
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="login-logo">
+        <div class="login-logo-dot"></div>
+        <div class="login-logo-text">Smash</div>
+      </div>
+      <div class="login-subtitle">Portal quản lý sân cầu lông</div>
+      <div class="login-dots">
+        <div class="login-dot active"></div>
+        <div class="login-dot"></div>
+        <div class="login-dot"></div>
+      </div>
+    </div>
+    <div class="login-body">
+      <div class="login-error" id="login-error">
+        <i class="ti ti-alert-circle"></i>
+        <span id="login-error-msg">Sai tên đăng nhập hoặc mật khẩu</span>
+      </div>
+      <div class="login-field">
+        <label for="login-user">Tên đăng nhập</label>
+        <input type="text" id="login-user" placeholder="Nhập username" autocomplete="username"
+          onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()"
+          oninput="clearLoginError()">
+      </div>
+      <div class="login-field">
+        <label for="login-pass">Mật khẩu</label>
+        <div class="pw-wrap">
+          <input type="password" id="login-pass" placeholder="Nhập mật khẩu" autocomplete="current-password"
+            onkeydown="if(event.key==='Enter')doLogin()"
+            oninput="clearLoginError()">
+          <button class="pw-toggle" onclick="togglePw()" type="button" title="Hiện/ẩn mật khẩu">
+            <i class="ti ti-eye" id="pw-icon"></i>
+          </button>
+        </div>
+      </div>
+      <button class="login-btn" id="login-btn" onclick="doLogin()">Đăng nhập</button>
+
+    </div>
+    <div class="login-footer">CLB Phú Mỹ Hưng · Smash v1.0</div>
+  </div>
+</div>
+
+<div class="portal" id="main-portal" style="display:none">
 
   <!-- TOPBAR -->
   <div class="topbar">
@@ -924,6 +1004,76 @@ select.inp{cursor:pointer}
 </div><!-- end portal -->
 
 <script>
+/* ── AUTH ──────────────────────────────────────────── */
+const CREDS = { admin: 'admin1234' };
+
+function doLogin() {
+  const user = document.getElementById('login-user').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const btn  = document.getElementById('login-btn');
+
+  if (!user || !pass) {
+    showLoginError('Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu');
+    return;
+  }
+
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  setTimeout(() => {
+    if (CREDS[user] && CREDS[user] === pass) {
+      try { sessionStorage.setItem('smash_auth', '1'); } catch(e) {}
+      const screen = document.getElementById('login-screen');
+      const portal = document.getElementById('main-portal');
+      screen.classList.add('hiding');
+      portal.style.display = 'flex';
+      portal.style.flexDirection = 'column';
+      setTimeout(() => { screen.style.display = 'none'; }, 380);
+    } else {
+      btn.classList.remove('loading');
+      btn.disabled = false;
+      showLoginError('Sai tên đăng nhập hoặc mật khẩu');
+      document.getElementById('login-pass').value = '';
+      document.getElementById('login-user').classList.add('error');
+      document.getElementById('login-pass').classList.add('error');
+    }
+  }, 700);
+}
+
+function showLoginError(msg) {
+  const el = document.getElementById('login-error');
+  const msgEl = document.getElementById('login-error-msg');
+  if (msgEl) msgEl.textContent = msg;
+  if (el) el.classList.add('show');
+}
+
+function clearLoginError() {
+  document.getElementById('login-error')?.classList.remove('show');
+  document.getElementById('login-user')?.classList.remove('error');
+  document.getElementById('login-pass')?.classList.remove('error');
+}
+
+function togglePw() {
+  const inp  = document.getElementById('login-pass');
+  const icon = document.getElementById('pw-icon');
+  const show = inp.type === 'password';
+  inp.type   = show ? 'text' : 'password';
+  icon.className = show ? 'ti ti-eye-off' : 'ti ti-eye';
+}
+
+// Auto-restore if already authenticated in this session
+(function() {
+  try {
+    if (sessionStorage.getItem('smash_auth') === '1') {
+      document.getElementById('login-screen').style.display = 'none';
+      const p = document.getElementById('main-portal');
+      p.style.display = 'flex';
+      p.style.flexDirection = 'column';
+    }
+  } catch(e) {}
+})();
+
+/* ── SIDEBAR ────────────────────────────────────────── */
 let sidebarOpen = true;
 function toggleSidebar() {
   sidebarOpen = !sidebarOpen;
