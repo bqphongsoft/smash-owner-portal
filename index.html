@@ -363,6 +363,86 @@ select.inp{cursor:pointer}
 .login-dots{display:flex;gap:4px;justify-content:center;margin-top:20px}
 .login-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.15)}
 .login-dot.active{background:rgba(255,255,255,.5)}
+
+/* QUICK BOOK MODAL */
+.qb-overlay{position:fixed;inset:0;background:rgba(11,26,18,.45);z-index:500;display:none;align-items:center;justify-content:center}
+.qb-overlay.show{display:flex}
+.qb-modal{background:#fff;border-radius:16px;width:420px;max-width:calc(100vw - 32px);box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden;animation:qbIn .2s cubic-bezier(.34,1.2,.64,1)}
+@keyframes qbIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+.qb-header{background:#0b1a12;padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+.qb-title{font-size:14px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px}
+.qb-title i{font-size:16px;color:#24a361}
+.qb-close{width:28px;height:28px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .12s}
+.qb-close:hover{background:rgba(255,255,255,.1);color:#fff}
+.qb-body{padding:20px}
+.qb-slot-info{background:var(--bg-success);border:1px solid rgba(22,101,52,.2);border-radius:var(--r-md);padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.qb-slot-info i{font-size:18px;color:var(--text-success)}
+.qb-slot-text{font-size:13px;font-weight:600;color:var(--text-success)}
+.qb-slot-sub{font-size:11px;color:var(--text-success);opacity:.7;margin-top:1px}
+.qb-type-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.qb-type{border:1.5px solid var(--border);border-radius:var(--r-md);padding:10px 12px;cursor:pointer;transition:all .12s;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--text-secondary)}
+.qb-type:hover{border-color:var(--border-md);background:var(--bg-secondary)}
+.qb-type.sel{border-color:var(--green);background:var(--bg-success);color:var(--text-success)}
+.qb-type i{font-size:16px}
+.qb-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.qb-field{}
+.qb-field label{display:block;font-size:11px;font-weight:500;color:var(--text-secondary);margin-bottom:4px}
+.qb-field input,.qb-field select{width:100%;font-size:12px;padding:8px 10px;border:1px solid var(--border-md);border-radius:var(--r-md);background:var(--bg-secondary);color:var(--text-primary);font-family:var(--font);transition:border-color .12s}
+.qb-field input:focus,.qb-field select:focus{outline:none;border-color:var(--green);background:#fff}
+.qb-rec-row{grid-column:1/-1;display:none}
+.qb-rec-row.show{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qb-footer{display:flex;gap:8px;padding:0 20px 20px}
+.qb-cancel{flex:1;padding:10px;border-radius:var(--r-md);border:1px solid var(--border-md);background:#fff;cursor:pointer;font-size:12px;font-weight:500;color:var(--text-secondary);font-family:var(--font)}
+.qb-cancel:hover{background:var(--bg-secondary)}
+.qb-save{flex:2;padding:10px;border-radius:var(--r-md);border:none;background:var(--green);color:#fff;cursor:pointer;font-size:12px;font-weight:700;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:6px}
+.qb-save:hover{background:#155f38}
+.qb-save i{font-size:14px}
+
+/* BOOKING DETAIL MODAL */
+.bd-overlay{position:fixed;inset:0;background:rgba(11,26,18,.5);z-index:600;display:none;align-items:center;justify-content:center}
+.bd-overlay.show{display:flex}
+.bd-modal{background:#fff;border-radius:16px;width:460px;max-width:calc(100vw - 32px);box-shadow:0 24px 80px rgba(0,0,0,.3);overflow:hidden;animation:bdIn .2s cubic-bezier(.34,1.2,.64,1)}
+@keyframes bdIn{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
+.bd-header{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:14px}
+.bd-avatar{width:44px;height:44px;border-radius:50%;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bd-header-info{flex:1;min-width:0}
+.bd-customer{font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:2px}
+.bd-phone{font-size:12px;color:var(--text-tertiary);display:flex;align-items:center;gap:4px}
+.bd-phone i{font-size:13px}
+.bd-close-btn{width:28px;height:28px;border-radius:8px;border:1px solid var(--border-md);background:transparent;color:var(--text-tertiary);font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background .12s}
+.bd-close-btn:hover{background:var(--bg-secondary);color:var(--text-primary)}
+.bd-body{padding:16px 20px}
+.bd-section{margin-bottom:14px}
+.bd-section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-tertiary);margin-bottom:8px}
+.bd-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)}
+.bd-row:last-child{border-bottom:none}
+.bd-label{font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:6px}
+.bd-label i{font-size:14px;color:var(--text-tertiary)}
+.bd-val{font-size:12px;font-weight:500;color:var(--text-primary);text-align:right}
+.bd-val.mono{font-family:var(--mono)}
+.bd-status-row{display:flex;align-items:center;justify-content:space-between;background:var(--bg-secondary);border-radius:var(--r-md);padding:12px 14px;margin-bottom:14px}
+.bd-status-label{font-size:12px;color:var(--text-secondary)}
+.bd-status-val{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600}
+.bd-actions{display:flex;gap:8px;padding:0 20px 20px}
+.bd-btn{flex:1;padding:9px;border-radius:var(--r-md);border:1px solid var(--border-md);background:#fff;cursor:pointer;font-size:12px;font-weight:600;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:6px;color:var(--text-primary);transition:background .12s}
+.bd-btn:hover{background:var(--bg-secondary)}
+.bd-btn i{font-size:14px;color:var(--text-tertiary)}
+.bd-btn.danger{border-color:rgba(153,27,27,.3);color:var(--text-danger)}
+.bd-btn.danger i{color:var(--text-danger)}
+.bd-btn.danger:hover{background:var(--bg-danger)}
+.bd-btn.primary{background:var(--green);color:#fff;border-color:var(--green)}
+.bd-btn.primary i{color:#fff}
+.bd-btn.primary:hover{background:#155f38}
+.bd-divider{height:1px;background:var(--border);margin:4px 0 12px}
+.bd-note{font-size:11px;color:var(--text-tertiary);background:var(--bg-secondary);border-radius:var(--r-md);padding:8px 12px;line-height:1.5;display:flex;gap:6px;align-items:flex-start}
+.bd-note i{font-size:13px;flex-shrink:0;margin-top:1px}
+.bd-timeline{margin-top:4px}
+.bd-tl-item{display:flex;align-items:flex-start;gap:10px;padding:6px 0}
+.bd-tl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.bd-tl-info{flex:1}
+.bd-tl-main{font-size:11px;font-weight:500;color:var(--text-primary)}
+.bd-tl-time{font-size:10px;color:var(--text-tertiary);font-family:var(--mono)}
+.bd-tag{font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px}
 </style>
 </head>
 <body>
@@ -433,7 +513,7 @@ select.inp{cursor:pointer}
     <div class="sidebar">
       <div class="nav-item active" onclick="nav('dashboard',this)"><i class="ti ti-layout-dashboard"></i>Tổng quan</div>
       <div class="nav-item" onclick="nav('calendar',this)"><i class="ti ti-calendar"></i><span class="nav-label">Lịch sân</span><span class="nav-tooltip">Lịch sân</span></div>
-      <div class="nav-item" onclick="nav('walkin',this)"><i class="ti ti-walk"></i><span class="nav-label">Nhập bộ hành</span><span class="nav-tooltip">Nhập bộ hành</span></div>
+      <div class="nav-item" onclick="nav('walkin',this)"><i class="ti ti-walk"></i><span class="nav-label">Đặt tại quầy</span><span class="nav-tooltip">Đặt tại quầy</span></div>
       <div class="nav-item" onclick="nav('bookings',this)"><i class="ti ti-clipboard-list"></i><span class="nav-label">Đặt sân</span><span class="nav-tooltip">Đặt sân</span><span class="nav-badge nb-warn">3</span></div>
       <div class="nav-group">Phân tích</div>
       <div class="nav-item" onclick="nav('revenue',this)"><i class="ti ti-chart-bar"></i><span class="nav-label">Doanh thu</span><span class="nav-tooltip">Doanh thu</span></div>
@@ -456,13 +536,13 @@ select.inp{cursor:pointer}
         <div class="page-head">
           <div class="page-title"><i class="ti ti-layout-dashboard"></i>Tổng quan</div>
           <div class="page-actions">
-            <button class="btn btn-primary" onclick="nav('calendar',document.querySelector('[onclick*=calendar]'))"><i class="ti ti-plus"></i>Thêm bộ hành</button>
+            <button class="btn btn-primary" onclick="nav('calendar',document.querySelector('[onclick*=calendar]'))"><i class="ti ti-plus"></i>Thêm tại quầy</button>
           </div>
         </div>
         <div class="kv-banner">
           <i class="ti ti-refresh" style="font-size:15px;color:var(--text-tertiary)"></i>
           <div style="flex:1">
-            <div style="font-size:11px;font-weight:600;color:var(--text-primary)">KiotViet — 3 lịch bộ hành vừa cập nhật</div>
+            <div style="font-size:11px;font-weight:600;color:var(--text-primary)">KiotViet — 3 lịch tại quầy vừa cập nhật</div>
             <div style="font-size:10px;color:var(--text-tertiary)">Sân A2 08:00 · B1 17:00 · B2 18:00</div>
           </div>
           <div style="font-size:10px;font-family:var(--mono);color:var(--text-tertiary)">08:47</div>
@@ -504,12 +584,12 @@ select.inp{cursor:pointer}
             <button class="btn"><i class="ti ti-chevron-left"></i></button>
             <button class="btn" style="min-width:110px;justify-content:center;font-weight:500">25 tháng 5</button>
             <button class="btn"><i class="ti ti-chevron-right"></i></button>
-            <button class="btn btn-primary"><i class="ti ti-plus"></i>Thêm bộ hành</button>
+            <button class="btn btn-primary"><i class="ti ti-plus"></i>Thêm tại quầy</button>
           </div>
         </div>
         <div class="legend-row">
           <div class="leg"><div class="leg-dot" style="background:var(--bg-success);border:1px solid rgba(22,101,52,.2)"></div>Smash app</div>
-          <div class="leg"><div class="leg-dot" style="background:var(--bg-secondary);border:1px solid var(--border)"></div>Bộ hành</div>
+          <div class="leg"><div class="leg-dot" style="background:var(--bg-secondary);border:1px solid var(--border)"></div>Tại quầy</div>
           <div class="leg"><div class="leg-dot" style="background:var(--bg-warning);border:1px solid rgba(146,96,10,.2)"></div>Giờ vàng</div>
           <div class="leg"><div class="leg-dot" style="border:1px dashed var(--border-md)"></div>Trống</div>
           <div class="leg"><div class="leg-dot" style="background:var(--bg-danger);border:1px solid rgba(153,27,27,.2)"></div>Khoá</div>
@@ -522,13 +602,13 @@ select.inp{cursor:pointer}
             <div class="cal-th">Sân B1</div>
             <div class="cal-th">Sân B2</div>
           </div>
-          <div class="cal-row-g"><div class="time-col">06:00</div><div class="cal-cell"><div class="slot s-app">Minh T.<br>65k</div></div><div class="cal-cell"><div class="slot s-app">Hùng N.<br>65k</div></div><div class="cal-cell"><div class="slot s-walk">Bộ hành</div></div><div class="cal-cell"><div class="slot s-free"><i class="ti ti-plus"></i></div></div></div>
-          <div class="cal-row-g"><div class="time-col">07:00</div><div class="cal-cell"><div class="slot s-app">Lan P.<br>65k</div></div><div class="cal-cell"><div class="slot s-free"><i class="ti ti-plus"></i></div></div><div class="cal-cell"><div class="slot s-app">Tú A.<br>65k</div></div><div class="cal-cell"><div class="slot s-walk">Bộ hành</div></div></div>
-          <div class="cal-row-g"><div class="time-col">08:00</div><div class="cal-cell"><div class="slot s-walk">Bộ hành</div></div><div class="cal-cell"><div class="slot s-app">Khoa D.<br>65k</div></div><div class="cal-cell"><div class="slot s-free"><i class="ti ti-plus"></i></div></div><div class="cal-cell"><div class="slot s-free"><i class="ti ti-plus"></i></div></div></div>
-          <div class="cal-row-g"><div class="time-col">17:00</div><div class="cal-cell"><div class="slot s-app">Việt H.<br>80k</div></div><div class="cal-cell"><div class="slot s-app">Nam T.<br>80k</div></div><div class="cal-cell"><div class="slot s-free"><i class="ti ti-plus"></i></div></div><div class="cal-cell"><div class="slot s-walk">Bộ hành</div></div></div>
-          <div class="cal-row-g"><div class="time-col">18:00</div><div class="cal-cell"><div class="slot s-peak">Peak · 90k</div></div><div class="cal-cell"><div class="slot s-peak">Peak · 90k</div></div><div class="cal-cell"><div class="slot s-peak">Peak · 90k</div></div><div class="cal-cell"><div class="slot s-free"><i class="ti ti-plus"></i></div></div></div>
-          <div class="cal-row-g"><div class="time-col">19:00</div><div class="cal-cell"><div class="slot s-peak">Peak · 90k</div></div><div class="cal-cell"><div class="slot s-free"><i class="ti ti-plus"></i></div></div><div class="cal-cell"><div class="slot s-app">Dũng L.<br>90k</div></div><div class="cal-cell"><div class="slot s-peak">Peak · 90k</div></div></div>
-          <div class="cal-row-g"><div class="time-col">20:00</div><div class="cal-cell"><div class="slot s-blocked">Khoá</div></div><div class="cal-cell"><div class="slot s-app">Bình K.<br>90k</div></div><div class="cal-cell"><div class="slot s-app">Sơn M.<br>90k</div></div><div class="cal-cell"><div class="slot s-app">Duy T.<br>90k</div></div></div>
+          <div class="cal-row-g"><div class="time-col">06:00</div><div class="cal-cell"><div class="slot s-app" onclick="viewBooking('A1_06')" style="cursor:pointer" title="Xem chi tiết">Minh T.<br>65k</div></div><div class="cal-cell"><div class="slot s-app" onclick="viewBooking('A2_06')" style="cursor:pointer" title="Xem chi tiết">Hùng N.<br>65k</div></div><div class="cal-cell"><div class="slot s-walk">Tại quầy</div></div><div class="cal-cell"><div class="slot s-free" onclick="quickBook(this)" style="cursor:pointer" title="Đặt tại quầy"><i class="ti ti-plus"></i></div></div></div>
+          <div class="cal-row-g"><div class="time-col">07:00</div><div class="cal-cell"><div class="slot s-app" onclick="viewBooking('A1_07')" style="cursor:pointer" title="Xem chi tiết">Lan P.<br>65k</div></div><div class="cal-cell"><div class="slot s-free" onclick="quickBook(this)" style="cursor:pointer" title="Đặt tại quầy"><i class="ti ti-plus"></i></div></div><div class="cal-cell"><div class="slot s-app" onclick="viewBooking('B1_07')" style="cursor:pointer" title="Xem chi tiết">Tú A.<br>65k</div></div><div class="cal-cell"><div class="slot s-walk">Tại quầy</div></div></div>
+          <div class="cal-row-g"><div class="time-col">08:00</div><div class="cal-cell"><div class="slot s-walk">Tại quầy</div></div><div class="cal-cell"><div class="slot s-app" onclick="viewBooking('A2_08')" style="cursor:pointer" title="Xem chi tiết">Khoa D.<br>65k</div></div><div class="cal-cell"><div class="slot s-free" onclick="quickBook(this)" style="cursor:pointer" title="Đặt tại quầy"><i class="ti ti-plus"></i></div></div><div class="cal-cell"><div class="slot s-free" onclick="quickBook(this)" style="cursor:pointer" title="Đặt tại quầy"><i class="ti ti-plus"></i></div></div></div>
+          <div class="cal-row-g"><div class="time-col">17:00</div><div class="cal-cell"><div class="slot s-app" onclick="viewBooking('A1_17')" style="cursor:pointer" title="Xem chi tiết">Việt H.<br>80k</div></div><div class="cal-cell"><div class="slot s-app" onclick="viewBooking('A2_17')" style="cursor:pointer" title="Xem chi tiết">Nam T.<br>80k</div></div><div class="cal-cell"><div class="slot s-free" onclick="quickBook(this)" style="cursor:pointer" title="Đặt tại quầy"><i class="ti ti-plus"></i></div></div><div class="cal-cell"><div class="slot s-walk">Tại quầy</div></div></div>
+          <div class="cal-row-g"><div class="time-col">18:00</div><div class="cal-cell"><div class="slot s-peak" onclick="viewBooking('A1_18')" style="cursor:pointer" title="Xem chi tiết">Peak · 90k</div></div><div class="cal-cell"><div class="slot s-peak" onclick="viewBooking('A2_18')" style="cursor:pointer" title="Xem chi tiết">Peak · 90k</div></div><div class="cal-cell"><div class="slot s-peak" onclick="viewBooking('B1_18')" style="cursor:pointer" title="Xem chi tiết">Peak · 90k</div></div><div class="cal-cell"><div class="slot s-free" onclick="quickBook(this)" style="cursor:pointer" title="Đặt tại quầy"><i class="ti ti-plus"></i></div></div></div>
+          <div class="cal-row-g"><div class="time-col">19:00</div><div class="cal-cell"><div class="slot s-peak" onclick="viewBooking('A1_19')" style="cursor:pointer" title="Xem chi tiết">Peak · 90k</div></div><div class="cal-cell"><div class="slot s-free" onclick="quickBook(this)" style="cursor:pointer" title="Đặt tại quầy"><i class="ti ti-plus"></i></div></div><div class="cal-cell"><div class="slot s-app" onclick="viewBooking('B1_19')" style="cursor:pointer" title="Xem chi tiết">Dũng L.<br>90k</div></div><div class="cal-cell"><div class="slot s-peak" onclick="viewBooking('B2_19')" style="cursor:pointer" title="Xem chi tiết">Peak · 90k</div></div></div>
+          <div class="cal-row-g"><div class="time-col">20:00</div><div class="cal-cell"><div class="slot s-blocked">Khoá</div></div><div class="cal-cell"><div class="slot s-app" onclick="viewBooking('A2_20')" style="cursor:pointer" title="Xem chi tiết">Bình K.<br>90k</div></div><div class="cal-cell"><div class="slot s-app" onclick="viewBooking('B1_20')" style="cursor:pointer" title="Xem chi tiết">Sơn M.<br>90k</div></div><div class="cal-cell"><div class="slot s-app" onclick="viewBooking('B2_20')" style="cursor:pointer" title="Xem chi tiết">Duy T.<br>90k</div></div></div>
         </div>
       </div>
 
@@ -544,11 +624,11 @@ select.inp{cursor:pointer}
         </div>
         <div class="card">
           <div class="card-head"><span class="card-title">Danh sách booking — 25/05</span></div>
-          <div class="row"><div class="av av-g">MT</div><div class="row-info"><div class="row-main">Minh Tuấn · Sân A1 · 06:00–07:00</div><div class="row-sub">Smash app · MoMo · +65 Smash Points</div></div><div class="row-val">65k</div><div class="tag tag-g">Đã TT</div></div>
-          <div class="row"><div class="av av-b">LP</div><div class="row-info"><div class="row-main">Lan Phương · Sân A1 · 07:00–08:00</div><div class="row-sub">Smash app · MoMo · Thêm: vợt 20k</div></div><div class="row-val">85k</div><div class="tag tag-g">Đã TT</div></div>
-          <div class="row"><div class="av av-a">VH</div><div class="row-info"><div class="row-main">Việt Hùng · Sân A1 · 17:00–18:00</div><div class="row-sub">Smash app · Chờ thanh toán</div></div><div class="row-val">80k</div><div class="tag tag-a">Chờ TT</div></div>
-          <div class="row"><div class="av av-gr">BH</div><div class="row-info"><div class="row-main">Bộ hành · Sân A2 · 08:00–09:00</div><div class="row-sub">KiotViet sync · Tiền mặt</div></div><div class="row-val">65k</div><div class="tag tag-gr">Bộ hành</div></div>
-          <div class="row"><div class="av av-g">DL</div><div class="row-info"><div class="row-main">Dũng Lâm · Sân B1 · 19:00–20:00</div><div class="row-sub">Smash app · ZaloPay</div></div><div class="row-val">90k</div><div class="tag tag-g">Đã TT</div></div>
+          <div class="row" onclick="viewBooking('A1_06')" style="cursor:pointer"><div class="av av-g">MT</div><div class="row-info"><div class="row-main">Minh Tuấn · Sân A1 · 06:00–07:00</div><div class="row-sub">Smash app · MoMo · +65 Smash Points</div></div><div class="row-val">65k</div><div class="tag tag-g">Đã TT</div></div>
+          <div class="row" onclick="viewBooking('A1_07')" style="cursor:pointer"><div class="av av-b">LP</div><div class="row-info"><div class="row-main">Lan Phương · Sân A1 · 07:00–08:00</div><div class="row-sub">Smash app · MoMo · Thêm: vợt 20k</div></div><div class="row-val">85k</div><div class="tag tag-g">Đã TT</div></div>
+          <div class="row" onclick="viewBooking('A1_17')" style="cursor:pointer"><div class="av av-a">VH</div><div class="row-info"><div class="row-main">Việt Hùng · Sân A1 · 17:00–18:00</div><div class="row-sub">Smash app · Chờ thanh toán</div></div><div class="row-val">80k</div><div class="tag tag-a">Chờ TT</div></div>
+          <div class="row"><div class="av av-gr">BH</div><div class="row-info"><div class="row-main">Tại quầy · Sân A2 · 08:00–09:00</div><div class="row-sub">KiotViet sync · Tiền mặt</div></div><div class="row-val">65k</div><div class="tag tag-gr">Tại quầy</div></div>
+          <div class="row" onclick="viewBooking('B1_19')" style="cursor:pointer"><div class="av av-g">DL</div><div class="row-info"><div class="row-main">Dũng Lâm · Sân B1 · 19:00–20:00</div><div class="row-sub">Smash app · ZaloPay</div></div><div class="row-val">90k</div><div class="tag tag-g">Đã TT</div></div>
         </div>
       </div>
 
@@ -697,13 +777,13 @@ select.inp{cursor:pointer}
         </div>
         <div class="card">
           <div class="card-head"><span class="card-title">Cấu hình đồng bộ</span></div>
-          <div class="toggle-row"><div><div class="tg-label">Tự động sync mỗi 5 phút</div><div class="tg-desc">Kéo lịch bộ hành từ KiotViet vào Smash</div></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+          <div class="toggle-row"><div><div class="tg-label">Tự động sync mỗi 5 phút</div><div class="tg-desc">Kéo lịch tại quầy từ KiotViet vào Smash</div></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
           <div class="toggle-row"><div><div class="tg-label">Two-way sync <span class="nav-badge nb-pro" style="font-size:9px">Pro</span></div><div class="tg-desc">Ghi booking Smash ngược vào KiotViet</div></div><div class="toggle" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
           <div class="toggle-row"><div><div class="tg-label">Cảnh báo double-booking</div><div class="tg-desc">Push ngay khi phát hiện conflict</div></div><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
         </div>
         <div class="card">
           <div class="card-head"><span class="card-title">Lịch sử sync gần đây</span></div>
-          <div class="kv-sync-row"><div class="kv-ico"><i class="ti ti-check" style="color:var(--text-success)"></i></div><div style="flex:1"><div class="kv-main">Thành công · 3 booking bộ hành mới</div><div class="kv-sub">Sân A2 08:00, B1 17:00, B2 18:00</div></div><div class="kv-t">08:47</div></div>
+          <div class="kv-sync-row"><div class="kv-ico"><i class="ti ti-check" style="color:var(--text-success)"></i></div><div style="flex:1"><div class="kv-main">Thành công · 3 booking tại quầy mới</div><div class="kv-sub">Sân A2 08:00, B1 17:00, B2 18:00</div></div><div class="kv-t">08:47</div></div>
           <div class="kv-sync-row"><div class="kv-ico"><i class="ti ti-check" style="color:var(--text-success)"></i></div><div style="flex:1"><div class="kv-main">Thành công · Không có thay đổi</div><div class="kv-sub">—</div></div><div class="kv-t">08:42</div></div>
           <div class="kv-sync-row"><div class="kv-ico"><i class="ti ti-alert-triangle" style="color:var(--text-warning)"></i></div><div style="flex:1"><div class="kv-main">Conflict · Sân A1 07:00</div><div class="kv-sub">Đã tự giải quyết — Smash ưu tiên</div></div><div class="kv-t">07:15</div></div>
         </div>
@@ -761,12 +841,12 @@ select.inp{cursor:pointer}
       </div>
 
 
-      <!-- NHẬP BỘ HÀNH -->
+      <!-- NHẬP TẠI QUẦY -->
       <div id="p-walkin" class="panel">
         <div class="page-head">
-          <div class="page-title"><i class="ti ti-walk"></i>Nhập khách bộ hành</div>
+          <div class="page-title"><i class="ti ti-walk"></i>Đặt tại quầy</div>
           <div class="page-actions">
-            <button class="btn" onclick="nav('walkin-list',this)"><i class="ti ti-list"></i>Danh sách bộ hành</button>
+            <button class="btn" onclick="nav('walkin-list',this)"><i class="ti ti-list"></i>Danh sách tại quầy</button>
           </div>
         </div>
 
@@ -914,14 +994,14 @@ select.inp{cursor:pointer}
 
         <div style="display:flex;gap:8px">
           <button class="btn" style="flex:1;justify-content:center" onclick="resetForm()"><i class="ti ti-x"></i>Huỷ</button>
-          <button class="btn btn-primary" style="flex:2;justify-content:center" onclick="saveWalkin()"><i class="ti ti-check"></i>Lưu booking bộ hành</button>
+          <button class="btn btn-primary" style="flex:2;justify-content:center" onclick="saveWalkin()"><i class="ti ti-check"></i>Lưu booking tại quầy</button>
         </div>
       </div>
 
-      <!-- DANH SÁCH BỘ HÀNH -->
+      <!-- DANH SÁCH TẠI QUẦY -->
       <div id="p-walkin-list" class="panel">
         <div class="page-head">
-          <div class="page-title"><i class="ti ti-list"></i>Danh sách bộ hành</div>
+          <div class="page-title"><i class="ti ti-list"></i>Danh sách tại quầy</div>
           <div class="page-actions">
             <button class="btn btn-primary" onclick="nav('walkin',document.querySelector('[onclick*=walkin]'))"><i class="ti ti-plus"></i>Nhập mới</button>
           </div>
@@ -929,7 +1009,7 @@ select.inp{cursor:pointer}
         <div class="metric-grid mg3" style="margin-bottom:12px">
           <div class="met"><div class="met-label"><i class="ti ti-calendar-event"></i>Đặt một lần</div><div class="met-val">12</div><div class="met-note">tháng 5</div></div>
           <div class="met"><div class="met-label"><i class="ti ti-calendar-repeat"></i>Đặt cố định</div><div class="met-val">8</div><div class="met-note">hợp đồng đang chạy</div></div>
-          <div class="met"><div class="met-label"><i class="ti ti-cash"></i>Doanh thu bộ hành</div><div class="met-val">8.4M</div><div class="met-note">tháng 5</div></div>
+          <div class="met"><div class="met-label"><i class="ti ti-cash"></i>Doanh thu tại quầy</div><div class="met-val">8.4M</div><div class="met-note">tháng 5</div></div>
         </div>
         <div style="display:flex;gap:6px;margin-bottom:12px;align-items:center">
           <select style="font-size:11px;padding:5px 9px;border:1px solid var(--border-md);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-primary);cursor:pointer;font-family:var(--font)">
@@ -1269,6 +1349,208 @@ function resetForm() {
 document.addEventListener('input', e => {
   if (e.target.id === 'wk-price') e.target.dataset.manual = '1';
 });
+
+/* ── BOOKING DATA ───────────────────────────────────── */
+const BOOKINGS_DB = {
+  A1_06:{court:'Sân A1',time:'06:00–07:00',name:'Minh Tuấn',phone:'0901 234 567',amount:'65.000đ',pay:'MoMo',status:'paid',type:'app',note:'Khách thân thiết · hay đặt sân A1 sáng sớm'},
+  A2_06:{court:'Sân A2',time:'06:00–07:00',name:'Hùng Nguyễn',phone:'0908 765 432',amount:'65.000đ',pay:'MoMo',status:'paid',type:'app',note:''},
+  A1_07:{court:'Sân A1',time:'07:00–08:00',name:'Lan Phương',phone:'0912 345 678',amount:'85.000đ',pay:'MoMo',status:'paid',type:'app',note:'Thêm: thuê vợt 20k · Khách VIP'},
+  B1_07:{court:'Sân B1',time:'07:00–08:00',name:'Tú An',phone:'0934 111 222',amount:'65.000đ',pay:'ZaloPay',status:'paid',type:'app',note:''},
+  A2_08:{court:'Sân A2',time:'08:00–09:00',name:'Khoa Duy',phone:'0909 876 543',amount:'65.000đ',pay:'ZaloPay',status:'paid',type:'app',note:''},
+  A1_17:{court:'Sân A1',time:'17:00–18:00',name:'Việt Hùng',phone:'0987 654 321',amount:'80.000đ',pay:'MoMo',status:'pending',type:'app',note:'Chờ xác nhận thanh toán'},
+  A2_17:{court:'Sân A2',time:'17:00–18:00',name:'Nam Trần',phone:'0901 111 333',amount:'80.000đ',pay:'ZaloPay',status:'paid',type:'app',note:''},
+  A1_18:{court:'Sân A1',time:'18:00–19:00',name:'Nhóm VP ABC',phone:'0903 555 666',amount:'90.000đ',pay:'Chuyển khoản',status:'paid',type:'peak',note:'4 người · giờ vàng'},
+  A2_18:{court:'Sân A2',time:'18:00–19:00',name:'CLB Badminton Q7',phone:'0911 222 444',amount:'90.000đ',pay:'Tiền mặt',status:'paid',type:'peak',note:'Đặt cố định · Thứ 6 mỗi tuần'},
+  B1_18:{court:'Sân B1',time:'18:00–19:00',name:'Trung Kiên',phone:'0922 333 555',amount:'90.000đ',pay:'MoMo',status:'paid',type:'peak',note:''},
+  B1_19:{court:'Sân B1',time:'19:00–20:00',name:'Dũng Lâm',phone:'0987 111 999',amount:'90.000đ',pay:'ZaloPay',status:'paid',type:'app',note:'Khách thân thiết · 7 buổi tháng này'},
+  A1_19:{court:'Sân A1',time:'19:00–20:00',name:'Nhóm công ty XYZ',phone:'0933 444 777',amount:'90.000đ',pay:'Chuyển khoản',status:'paid',type:'peak',note:'Giờ vàng · 4 người'},
+  B2_19:{court:'Sân B2',time:'19:00–20:00',name:'Sơn Minh',phone:'0945 222 888',amount:'90.000đ',pay:'MoMo',status:'paid',type:'peak',note:''},
+  A2_20:{court:'Sân A2',time:'20:00–21:00',name:'Bình Khoa',phone:'0956 333 111',amount:'90.000đ',pay:'ZaloPay',status:'paid',type:'app',note:''},
+  B1_20:{court:'Sân B1',time:'20:00–21:00',name:'Sơn Mạnh',phone:'0967 444 222',amount:'90.000đ',pay:'MoMo',status:'paid',type:'app',note:''},
+  B2_20:{court:'Sân B2',time:'20:00–21:00',name:'Duy Thành',phone:'0978 555 333',amount:'90.000đ',pay:'ZaloPay',status:'paid',type:'app',note:''},
+};
+
+/* ── VIEW BOOKING DETAIL ────────────────────────────── */
+function viewBooking(key) {
+  const b = BOOKINGS_DB[key];
+  if (!b) return;
+  const keys = Object.keys(BOOKINGS_DB);
+  const avPairs = [['#e8f5ee','#166534'],['#e8f0fb','#1e4fa8'],['#fdf3e3','#92600a'],['#fdeaea','#991b1b']];
+  const av = avPairs[keys.indexOf(key) % 4];
+  const initials = b.name.split(' ').slice(-2).map(function(w){return w[0];}).join('').toUpperCase();
+  const avEl = document.getElementById('bd-avatar');
+  avEl.textContent = initials;
+  avEl.style.background = av[0];
+  avEl.style.color = av[1];
+  document.getElementById('bd-customer').textContent = b.name;
+  document.getElementById('bd-phone').textContent = b.phone || 'Không có SĐT';
+  document.getElementById('bd-court').textContent = b.court;
+  document.getElementById('bd-time').textContent = b.time;
+  document.getElementById('bd-pay').textContent = b.pay;
+  document.getElementById('bd-amount').textContent = b.amount;
+  var typeLabels = {app:'Đặt qua Smash app', peak:'Giờ vàng · Smash app', walk:'Đặt tại quầy'};
+  document.getElementById('bd-type-lbl').textContent = typeLabels[b.type] || b.type;
+  var statusEl = document.getElementById('bd-status-val');
+  var payRow = document.getElementById('bd-tl-pay-row');
+  if (b.status === 'paid') {
+    statusEl.innerHTML = '<span class="bd-tag" style="background:var(--bg-success);color:var(--text-success)">✓ Đã thanh toán</span>';
+    if (payRow) payRow.style.display = 'flex';
+  } else if (b.status === 'pending') {
+    statusEl.innerHTML = '<span class="bd-tag" style="background:var(--bg-warning);color:var(--text-warning)">⏳ Chờ thanh toán</span>';
+    if (payRow) payRow.style.display = 'none';
+  } else {
+    statusEl.innerHTML = '<span class="bd-tag" style="background:var(--bg-danger);color:var(--text-danger)">✗ Đã huỷ</span>';
+    if (payRow) payRow.style.display = 'none';
+  }
+  var noteWrap = document.getElementById('bd-note-wrap');
+  if (b.note) {
+    document.getElementById('bd-note-text').textContent = b.note;
+    noteWrap.style.display = 'block';
+  } else {
+    noteWrap.style.display = 'none';
+  }
+  document.getElementById('bd-overlay').classList.add('show');
+}
+
+function closeBD() {
+  var el = document.getElementById('bd-overlay');
+  if (el) el.classList.remove('show');
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') { closeBD(); if(typeof closeQB === 'function') closeQB(); }
+});
+
 </script>
+
+<!-- QUICK BOOK MODAL -->
+<div class="qb-overlay" id="qb-overlay" onclick="if(event.target===this)closeQB()">
+  <div class="qb-modal">
+    <div class="qb-header">
+      <div class="qb-title"><i class="ti ti-calendar-plus"></i>Đặt tại quầy</div>
+      <button class="qb-close" onclick="closeQB()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="qb-body">
+      <div class="qb-slot-info">
+        <i class="ti ti-layout-grid"></i>
+        <div>
+          <div class="qb-slot-text" id="qb-slot-label">Sân A1 · 07:00–08:00</div>
+          <div class="qb-slot-sub">Thứ 6, 25/05/2025 · Giá: <span id="qb-price-lbl">65.000đ</span>/giờ</div>
+        </div>
+      </div>
+
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-tertiary);margin-bottom:8px">Loại đặt sân</div>
+      <div class="qb-type-row">
+        <div class="qb-type sel" id="qbt-once" onclick="selectQBType('once')">
+          <i class="ti ti-calendar-event"></i>Một lần
+        </div>
+        <div class="qb-type" id="qbt-rec" onclick="selectQBType('rec')">
+          <i class="ti ti-calendar-repeat"></i>Cố định hàng tuần
+        </div>
+      </div>
+
+      <div class="qb-fields">
+        <div class="qb-field">
+          <label>Họ tên khách</label>
+          <input type="text" id="qb-name" placeholder="Khách vãng lai">
+        </div>
+        <div class="qb-field">
+          <label>Số điện thoại</label>
+          <input type="tel" id="qb-phone" placeholder="0901 234 567">
+        </div>
+        <div class="qb-field">
+          <label>Số giờ</label>
+          <select id="qb-hours" onchange="updateQBTotal()">
+            <option value="1">1 giờ</option>
+            <option value="1.5">1.5 giờ</option>
+            <option value="2">2 giờ</option>
+            <option value="3">3 giờ</option>
+          </select>
+        </div>
+        <div class="qb-field">
+          <label>Thanh toán</label>
+          <select id="qb-pay">
+            <option value="cash">Tiền mặt</option>
+            <option value="transfer">Chuyển khoản</option>
+            <option value="momo">MoMo</option>
+            <option value="zalopay">ZaloPay</option>
+            <option value="unpaid">Chưa thanh toán</option>
+          </select>
+        </div>
+        <div class="qb-rec-row" id="qb-rec-row">
+          <div class="qb-field">
+            <label>Từ ngày</label>
+            <input type="date" id="qb-from">
+          </div>
+          <div class="qb-field">
+            <label>Đến ngày</label>
+            <input type="date" id="qb-to">
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-secondary);border-radius:var(--r-md);padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:12px;color:var(--text-secondary)">Tổng tiền</span>
+        <span style="font-size:16px;font-weight:700;font-family:var(--mono);color:var(--green)" id="qb-total">65.000đ</span>
+      </div>
+    </div>
+    <div class="qb-footer">
+      <button class="qb-cancel" onclick="closeQB()">Huỷ</button>
+      <button class="qb-save" onclick="saveQB()"><i class="ti ti-check"></i>Lưu đặt sân</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOOKING DETAIL MODAL -->
+<div class="bd-overlay" id="bd-overlay" onclick="if(event.target===this)closeBD()">
+  <div class="bd-modal">
+    <div class="bd-header">
+      <div class="bd-avatar" id="bd-avatar"></div>
+      <div class="bd-header-info">
+        <div class="bd-customer" id="bd-customer">—</div>
+        <div class="bd-phone"><i class="ti ti-phone"></i><span id="bd-phone">—</span></div>
+      </div>
+      <button class="bd-close-btn" onclick="closeBD()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="bd-body">
+
+      <div class="bd-status-row">
+        <span class="bd-status-label">Trạng thái booking</span>
+        <span class="bd-status-val" id="bd-status-val"></span>
+      </div>
+
+      <div class="bd-section">
+        <div class="bd-section-label">Chi tiết sân & giờ</div>
+        <div class="bd-row"><span class="bd-label"><i class="ti ti-layout-grid"></i>Sân</span><span class="bd-val" id="bd-court">—</span></div>
+        <div class="bd-row"><span class="bd-label"><i class="ti ti-clock"></i>Thời gian</span><span class="bd-val mono" id="bd-time">—</span></div>
+        <div class="bd-row"><span class="bd-label"><i class="ti ti-calendar"></i>Ngày</span><span class="bd-val" id="bd-date">Thứ 6, 25/05/2025</span></div>
+        <div class="bd-row"><span class="bd-label"><i class="ti ti-tag"></i>Loại</span><span class="bd-val" id="bd-type-lbl">—</span></div>
+      </div>
+
+      <div class="bd-section">
+        <div class="bd-section-label">Thanh toán</div>
+        <div class="bd-row"><span class="bd-label"><i class="ti ti-cash"></i>Phương thức</span><span class="bd-val" id="bd-pay">—</span></div>
+        <div class="bd-row"><span class="bd-label"><i class="ti ti-receipt"></i>Số tiền</span><span class="bd-val mono" id="bd-amount" style="font-size:14px;color:var(--green);font-weight:700">—</span></div>
+      </div>
+
+      <div id="bd-note-wrap" style="display:none">
+        <div class="bd-note"><i class="ti ti-notes"></i><span id="bd-note-text"></span></div>
+      </div>
+
+      <div class="bd-section" style="margin-bottom:0">
+        <div class="bd-section-label">Lịch sử</div>
+        <div class="bd-timeline">
+          <div class="bd-tl-item"><div class="bd-tl-dot" style="background:var(--text-success)"></div><div class="bd-tl-info"><div class="bd-tl-main" id="bd-tl-created">Đặt sân thành công</div><div class="bd-tl-time">25/05/2025 · 07:32</div></div></div>
+          <div class="bd-tl-item" id="bd-tl-pay-row"><div class="bd-tl-dot" style="background:var(--green)"></div><div class="bd-tl-info"><div class="bd-tl-main">Thanh toán xác nhận</div><div class="bd-tl-time">25/05/2025 · 07:33</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="bd-actions">
+      <button class="bd-btn" onclick="closeBD()"><i class="ti ti-edit"></i>Chỉnh sửa</button>
+      <button class="bd-btn" onclick="closeBD()"><i class="ti ti-message"></i>Zalo</button>
+      <button class="bd-btn danger" onclick="closeBD()"><i class="ti ti-calendar-x"></i>Huỷ booking</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
