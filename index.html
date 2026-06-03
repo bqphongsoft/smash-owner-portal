@@ -34,12 +34,12 @@
   --r-lg:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font);background:#e8ede9;display:flex;align-items:flex-start;justify-content:center;min-height:100vh;padding:24px 16px 40px}
+html,body{height:100%;margin:0;padding:0}body{font-family:var(--font);background:var(--bg-tertiary);height:100vh;overflow:hidden}
 
-.portal{width:900px;max-width:100%;background:var(--bg-tertiary);border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:0 8px 40px rgba(11,26,18,.12)}
+.portal{width:100%;height:100vh;background:var(--bg-tertiary);overflow:hidden;display:flex;flex-direction:column}
 
 /* TOPBAR */
-.topbar{background:var(--bg-primary);border-bottom:1px solid var(--border);padding:0 16px;display:flex;align-items:center;gap:10px;height:48px;flex-shrink:0}
+.topbar{background:var(--bg-primary);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;gap:10px;height:52px;flex-shrink:0}
 .logo{font-size:14px;font-weight:700;color:var(--text-primary);display:flex;align-items:center;gap:7px;letter-spacing:-.3px}
 .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
 .court-name{font-size:12px;color:var(--text-tertiary);border-left:1px solid var(--border);padding-left:10px;margin-left:2px}
@@ -52,10 +52,18 @@ body{font-family:var(--font);background:#e8ede9;display:flex;align-items:flex-st
 .avatar{width:28px;height:28px;border-radius:50%;background:var(--bg-success);color:var(--text-success);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid rgba(22,101,52,.15)}
 
 /* BODY */
-.body-layout{display:flex;height:580px}
+.body-layout{display:flex;flex:1;min-height:0}
 
 /* SIDEBAR */
-.sidebar{width:185px;flex-shrink:0;background:var(--bg-primary);border-right:1px solid var(--border);padding:10px 6px;display:flex;flex-direction:column;gap:1px;overflow-y:auto}
+.sidebar{width:200px;flex-shrink:0;background:var(--bg-primary);border-right:1px solid var(--border);padding:10px 6px;display:flex;flex-direction:column;gap:1px;overflow-y:auto;height:100%;transition:width .22s cubic-bezier(.4,0,.2,1),padding .22s cubic-bezier(.4,0,.2,1);overflow:hidden}
+.sidebar.collapsed{width:52px;padding:10px 6px}
+.sidebar.collapsed .nav-group{opacity:0;height:0;padding:0;margin:0;overflow:hidden}
+.sidebar.collapsed .nav-item{padding:8px;justify-content:center}
+.sidebar.collapsed .nav-item i{width:auto;margin:0}
+.sidebar.collapsed .nav-label{display:none}
+.sidebar.collapsed .nav-badge{display:none}
+.sidebar.collapsed .nav-item.active::after{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:20px;background:var(--green);border-radius:0 2px 2px 0}
+.sidebar.collapsed .nav-item{position:relative}
 .sidebar::-webkit-scrollbar{display:none}
 .nav-group{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text-tertiary);padding:10px 8px 4px;margin-top:2px}
 .nav-item{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:var(--r-md);cursor:pointer;font-size:12px;color:var(--text-secondary);transition:background .1s,color .1s;white-space:nowrap;user-select:none}
@@ -68,7 +76,7 @@ body{font-family:var(--font);background:#e8ede9;display:flex;align-items:flex-st
 .nb-pro{background:var(--bg-info);color:var(--text-info)}
 
 /* MAIN */
-.main{flex:1;overflow-y:auto;padding:16px;min-width:0}
+.main{flex:1;overflow-y:auto;padding:20px 24px;min-width:0;height:100%}
 .main::-webkit-scrollbar{width:3px}
 .main::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 
@@ -235,6 +243,90 @@ select.inp{cursor:pointer}
 .notif-time{font-size:10px;font-family:var(--mono);color:var(--text-tertiary);flex-shrink:0;white-space:nowrap}
 
 .sec-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text-tertiary);margin-bottom:8px}
+
+/* WALK-IN FORM */
+.type-selector{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.type-card{border:2px solid var(--border);border-radius:var(--r-lg);padding:14px;cursor:pointer;transition:border-color .15s,background .15s;text-align:center;user-select:none}
+.type-card:hover{border-color:var(--border-md);background:var(--bg-secondary)}
+.type-card.sel{border-color:var(--green);background:var(--bg-success)}
+.type-card.sel .type-icon{color:var(--text-success)}
+.type-card.sel .type-lbl{color:var(--text-success);font-weight:600}
+.type-card.sel .type-desc2{color:var(--text-success);opacity:.8}
+.type-icon{font-size:28px;margin-bottom:7px;color:var(--text-tertiary);display:block;transition:color .15s}
+.type-lbl{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:3px;transition:color .15s}
+.type-desc2{font-size:11px;color:var(--text-tertiary);line-height:1.4;transition:color .15s}
+.fsec{margin-bottom:14px}
+.fsec-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-tertiary);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.fsec-title i{font-size:12px}
+.fg{display:grid;gap:8px}
+.fg2{grid-template-columns:1fr 1fr}
+.fg3{grid-template-columns:1fr 1fr 1fr}
+.fl{}
+.fl-label{font-size:11px;font-weight:500;color:var(--text-secondary);margin-bottom:4px;display:flex;align-items:center;gap:3px}
+.fl-req{color:var(--text-danger);font-size:11px}
+.fl input,.fl select,.fl textarea{width:100%;font-size:12px;padding:8px 10px;border:1px solid var(--border-md);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-primary);font-family:var(--font);transition:border-color .12s}
+.fl input:focus,.fl select:focus,.fl textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(27,122,71,.08)}
+.fl textarea{resize:vertical;min-height:56px;line-height:1.5}
+.fl select{cursor:pointer}
+.fl-hint{font-size:10px;color:var(--text-tertiary);margin-top:3px}
+.day-pills{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px}
+.day-cb{display:none}
+.day-lbl{width:34px;height:34px;border-radius:50%;border:1px solid var(--border-md);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;cursor:pointer;color:var(--text-tertiary);transition:all .12s;user-select:none}
+.day-cb:checked+.day-lbl{background:var(--green);border-color:var(--green);color:#fff}
+.rec-fields{display:none}
+.rec-fields.show{display:block}
+.summary-box{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;margin-bottom:14px}
+.sum-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)}
+.sum-row:last-child{border-bottom:none;padding-top:9px;margin-top:2px}
+.sum-label{font-size:12px;color:var(--text-secondary)}
+.sum-val{font-size:12px;font-weight:500;color:var(--text-primary);font-family:var(--mono)}
+.sum-row.total .sum-label{font-size:13px;font-weight:700;color:var(--text-primary);font-family:var(--font)}
+.sum-row.total .sum-val{font-size:17px;font-weight:700;color:var(--green)}
+.rec-preview{background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 14px;margin-bottom:14px}
+.rp-head{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-tertiary);margin-bottom:8px}
+.rp-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border)}
+.rp-row:last-child{border-bottom:none}
+.rp-date{font-size:11px;font-weight:600;color:var(--text-primary);font-family:var(--mono);min-width:80px}
+.rp-info{font-size:11px;color:var(--text-secondary);flex:1}
+.wl-item{background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--r-lg);padding:11px 14px;margin-bottom:7px;display:flex;align-items:flex-start;gap:10px}
+.wl-av{width:32px;height:32px;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.wl-body{flex:1;min-width:0}
+.wl-name{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:2px}
+.wl-detail{font-size:11px;color:var(--text-tertiary);line-height:1.5}
+.wl-right{text-align:right;flex-shrink:0}
+.wl-amount{font-size:13px;font-weight:700;font-family:var(--mono);color:var(--text-primary)}
+.wl-badge{font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block;margin-top:3px;font-weight:500}
+.wlb-once{background:var(--bg-secondary);color:var(--text-tertiary);border:1px solid var(--border)}
+.wlb-rec{background:var(--bg-info);color:var(--text-info)}
+.wl-actions{display:flex;gap:5px;margin-top:7px}
+.divider-or{display:flex;align-items:center;gap:8px;margin:14px 0;font-size:11px;color:var(--text-tertiary)}
+.divider-or::before,.divider-or::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .mg4{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width: 768px) {
+  .sidebar{width:52px}
+  .sidebar .nav-item span,.sidebar .nav-group,.nav-badge{display:none}
+  .sidebar .nav-item{justify-content:center;padding:8px}
+  .sidebar .nav-item i{width:auto}
+  .two-col,.fg2,.fg3,.price-grid,.type-selector,.inp-row{grid-template-columns:1fr}
+  .mg4,.mg3{grid-template-columns:repeat(2,1fr)}
+  .main{padding:14px 16px}
+}
+@media (max-width: 480px) {
+  .mg4,.mg3,.mg2{grid-template-columns:1fr}
+  .topbar .court-name{display:none}
+  .live-pill{display:none}
+}
+
+/* SIDEBAR TOGGLE */
+.sidebar-toggle{width:32px;height:32px;border-radius:var(--r-md);border:1px solid var(--border);background:var(--bg-primary);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text-tertiary);transition:background .12s,color .12s;flex-shrink:0;margin-right:2px}
+.sidebar-toggle:hover{background:var(--bg-secondary);color:var(--text-primary)}
+.nav-label{transition:opacity .15s}
+.nav-tooltip{display:none;position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%);background:var(--text-primary);color:var(--bg-primary);font-size:11px;font-weight:500;padding:4px 8px;border-radius:6px;white-space:nowrap;z-index:100;pointer-events:none}
+.sidebar.collapsed .nav-item:hover .nav-tooltip{display:block}
 </style>
 </head>
 <body>
@@ -242,8 +334,11 @@ select.inp{cursor:pointer}
 
   <!-- TOPBAR -->
   <div class="topbar">
+    <button class="sidebar-toggle" onclick="toggleSidebar()" title="Đóng/mở menu" aria-label="Toggle sidebar">
+      <i class="ti ti-menu-2" id="toggle-icon"></i>
+    </button>
     <div class="logo"><div class="logo-dot"></div>Smash</div>
-    <span class="court-name">CLB Phú Mỹ Hưng</span>
+    <span class="court-name" id="court-name-lbl">CLB Phú Mỹ Hưng</span>
     <div class="topbar-right">
       <div class="live-pill"><div class="live-dot"></div>Live</div>
       <div class="icon-btn" title="Thông báo"><i class="ti ti-bell"></i></div>
@@ -257,19 +352,20 @@ select.inp{cursor:pointer}
     <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="nav-item active" onclick="nav('dashboard',this)"><i class="ti ti-layout-dashboard"></i>Tổng quan</div>
-      <div class="nav-item" onclick="nav('calendar',this)"><i class="ti ti-calendar"></i>Lịch sân</div>
-      <div class="nav-item" onclick="nav('bookings',this)"><i class="ti ti-clipboard-list"></i>Đặt sân<span class="nav-badge nb-warn">3</span></div>
+      <div class="nav-item" onclick="nav('calendar',this)"><i class="ti ti-calendar"></i><span class="nav-label">Lịch sân</span><span class="nav-tooltip">Lịch sân</span></div>
+      <div class="nav-item" onclick="nav('walkin',this)"><i class="ti ti-walk"></i><span class="nav-label">Nhập bộ hành</span><span class="nav-tooltip">Nhập bộ hành</span></div>
+      <div class="nav-item" onclick="nav('bookings',this)"><i class="ti ti-clipboard-list"></i><span class="nav-label">Đặt sân</span><span class="nav-tooltip">Đặt sân</span><span class="nav-badge nb-warn">3</span></div>
       <div class="nav-group">Phân tích</div>
-      <div class="nav-item" onclick="nav('revenue',this)"><i class="ti ti-chart-bar"></i>Doanh thu</div>
-      <div class="nav-item" onclick="nav('customers',this)"><i class="ti ti-users"></i>Khách hàng</div>
-      <div class="nav-item" onclick="nav('reviews',this)"><i class="ti ti-star"></i>Đánh giá<span class="nav-badge nb-danger">1</span></div>
+      <div class="nav-item" onclick="nav('revenue',this)"><i class="ti ti-chart-bar"></i><span class="nav-label">Doanh thu</span><span class="nav-tooltip">Doanh thu</span></div>
+      <div class="nav-item" onclick="nav('customers',this)"><i class="ti ti-users"></i><span class="nav-label">Khách hàng</span><span class="nav-tooltip">Khách hàng</span></div>
+      <div class="nav-item" onclick="nav('reviews',this)"><i class="ti ti-star"></i><span class="nav-label">Đánh giá</span><span class="nav-tooltip">Đánh giá</span><span class="nav-badge nb-danger">1</span></div>
       <div class="nav-group">Vận hành</div>
-      <div class="nav-item" onclick="nav('pricing',this)"><i class="ti ti-tag"></i>Giá & ưu đãi</div>
-      <div class="nav-item" onclick="nav('promo',this)"><i class="ti ti-speakerphone"></i>Khuyến mãi<span class="nav-badge nb-pro">Pro</span></div>
-      <div class="nav-item" onclick="nav('kiotviet',this)"><i class="ti ti-refresh"></i>KiotViet sync</div>
-      <div class="nav-item" onclick="nav('notifications',this)"><i class="ti ti-bell"></i>Thông báo</div>
+      <div class="nav-item" onclick="nav('pricing',this)"><i class="ti ti-tag"></i><span class="nav-label">Giá & ưu đãi</span><span class="nav-tooltip">Giá & ưu đãi</span></div>
+      <div class="nav-item" onclick="nav('promo',this)"><i class="ti ti-speakerphone"></i><span class="nav-label">Khuyến mãi</span><span class="nav-tooltip">Khuyến mãi</span><span class="nav-badge nb-pro">Pro</span></div>
+      <div class="nav-item" onclick="nav('kiotviet',this)"><i class="ti ti-refresh"></i><span class="nav-label">KiotViet sync</span><span class="nav-tooltip">KiotViet sync</span></div>
+      <div class="nav-item" onclick="nav('notifications',this)"><i class="ti ti-bell"></i><span class="nav-label">Thông báo</span><span class="nav-tooltip">Thông báo</span></div>
       <div class="nav-group">Hệ thống</div>
-      <div class="nav-item" onclick="nav('settings',this)"><i class="ti ti-building"></i>Cài đặt sân</div>
+      <div class="nav-item" onclick="nav('settings',this)"><i class="ti ti-building"></i><span class="nav-label">Cài đặt sân</span><span class="nav-tooltip">Cài đặt sân</span></div>
     </div>
 
     <!-- MAIN CONTENT -->
@@ -584,11 +680,289 @@ select.inp{cursor:pointer}
         </div>
       </div>
 
+
+      <!-- NHẬP BỘ HÀNH -->
+      <div id="p-walkin" class="panel">
+        <div class="page-head">
+          <div class="page-title"><i class="ti ti-walk"></i>Nhập khách bộ hành</div>
+          <div class="page-actions">
+            <button class="btn" onclick="nav('walkin-list',this)"><i class="ti ti-list"></i>Danh sách bộ hành</button>
+          </div>
+        </div>
+
+        <!-- CHỌN LOẠI BOOKING -->
+        <div class="card" style="margin-bottom:10px">
+          <div style="font-size:12px;font-weight:600;color:var(--text-primary);margin-bottom:10px">Loại lịch đặt</div>
+          <div class="type-selector">
+            <div class="type-card sel" id="type-once" onclick="selectType('once')">
+              <i class="ti ti-calendar-event type-icon"></i>
+              <div class="type-lbl">Đặt một lần</div>
+              <div class="type-desc2">Khách đến chơi theo nhu cầu, không cố định lịch</div>
+            </div>
+            <div class="type-card" id="type-rec" onclick="selectType('rec')">
+              <i class="ti ti-calendar-repeat type-icon"></i>
+              <div class="type-lbl">Đặt cố định theo tháng</div>
+              <div class="type-desc2">Khách thuê sân cố định, lặp lại mỗi tuần trong tháng</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- THÔNG TIN KHÁCH -->
+        <div class="card" style="margin-bottom:10px">
+          <div class="fsec-title"><i class="ti ti-user"></i>Thông tin khách hàng</div>
+          <div class="fg fg2">
+            <div class="fl">
+              <label class="fl-label">Họ tên <span class="fl-req">*</span></label>
+              <input type="text" id="wk-name" placeholder="VD: Nguyễn Văn Tuấn" oninput="updateSummary()">
+            </div>
+            <div class="fl">
+              <label class="fl-label">Số điện thoại <span class="fl-req">*</span></label>
+              <input type="tel" id="wk-phone" placeholder="0901 234 567" oninput="updateSummary()">
+            </div>
+          </div>
+          <div class="fl" style="margin-top:8px">
+            <label class="fl-label">Ghi chú (tuỳ chọn)</label>
+            <textarea id="wk-note" placeholder="VD: Khách quen, hay đặt sân A1 buổi sáng..."></textarea>
+          </div>
+        </div>
+
+        <!-- CHI TIẾT SÂN -->
+        <div class="card" style="margin-bottom:10px">
+          <div class="fsec-title"><i class="ti ti-layout-grid"></i>Chi tiết sân & giờ</div>
+          <div class="fg fg3" style="margin-bottom:8px">
+            <div class="fl">
+              <label class="fl-label">Chọn sân <span class="fl-req">*</span></label>
+              <select id="wk-court" onchange="updateSummary()">
+                <option value="">-- Chọn sân --</option>
+                <option value="A1">Sân A1</option>
+                <option value="A2">Sân A2</option>
+                <option value="B1">Sân B1</option>
+                <option value="B2">Sân B2</option>
+              </select>
+            </div>
+            <div class="fl">
+              <label class="fl-label">Giờ bắt đầu <span class="fl-req">*</span></label>
+              <select id="wk-start" onchange="updateSummary()">
+                <option value="">-- Chọn giờ --</option>
+                <option>05:00</option><option>06:00</option><option>07:00</option>
+                <option>08:00</option><option>09:00</option><option>10:00</option>
+                <option>11:00</option><option>12:00</option><option>13:00</option>
+                <option>14:00</option><option>15:00</option><option>16:00</option>
+                <option>17:00</option><option>18:00</option><option>19:00</option>
+                <option>20:00</option><option>21:00</option>
+              </select>
+            </div>
+            <div class="fl">
+              <label class="fl-label">Số giờ <span class="fl-req">*</span></label>
+              <select id="wk-hours" onchange="updateSummary()">
+                <option value="1">1 giờ</option>
+                <option value="1.5">1.5 giờ</option>
+                <option value="2">2 giờ</option>
+                <option value="3">3 giờ</option>
+              </select>
+            </div>
+          </div>
+          <div class="fg fg2">
+            <div class="fl">
+              <label class="fl-label">Giá / giờ (đ) <span class="fl-req">*</span></label>
+              <input type="number" id="wk-price" value="65000" step="5000" oninput="updateSummary()">
+              <div class="fl-hint">Giá tự động theo khung giờ. Có thể chỉnh thủ công.</div>
+            </div>
+            <div class="fl">
+              <label class="fl-label">Thanh toán</label>
+              <select id="wk-pay" onchange="updateSummary()">
+                <option value="cash">Tiền mặt</option>
+                <option value="transfer">Chuyển khoản</option>
+                <option value="momo">MoMo</option>
+                <option value="zalopay">ZaloPay</option>
+                <option value="unpaid">Chưa thanh toán</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- ONLY-ONCE: ngày đặt -->
+        <div id="once-fields" class="card" style="margin-bottom:10px">
+          <div class="fsec-title"><i class="ti ti-calendar"></i>Ngày chơi</div>
+          <div class="fl">
+            <label class="fl-label">Chọn ngày <span class="fl-req">*</span></label>
+            <input type="date" id="wk-date" oninput="updateSummary()">
+          </div>
+        </div>
+
+        <!-- RECURRING: lặp lại -->
+        <div id="rec-fields" class="card" style="margin-bottom:10px;display:none">
+          <div class="fsec-title"><i class="ti ti-repeat"></i>Lịch cố định hàng tuần</div>
+          <div class="fl" style="margin-bottom:10px">
+            <label class="fl-label">Chọn ngày trong tuần <span class="fl-req">*</span></label>
+            <div class="day-pills">
+              <input type="checkbox" class="day-cb" id="d2" value="T2"><label class="day-lbl" for="d2" onclick="updateRecPreview()">T2</label>
+              <input type="checkbox" class="day-cb" id="d3" value="T3"><label class="day-lbl" for="d3" onclick="updateRecPreview()">T3</label>
+              <input type="checkbox" class="day-cb" id="d4" value="T4"><label class="day-lbl" for="d4" onclick="updateRecPreview()">T4</label>
+              <input type="checkbox" class="day-cb" id="d5" value="T5"><label class="day-lbl" for="d5" onclick="updateRecPreview()">T5</label>
+              <input type="checkbox" class="day-cb" id="d6" value="T6"><label class="day-lbl" for="d6" onclick="updateRecPreview()">T6</label>
+              <input type="checkbox" class="day-cb" id="d7" value="T7"><label class="day-lbl" for="d7" onclick="updateRecPreview()">T7</label>
+              <input type="checkbox" class="day-cb" id="d8" value="CN"><label class="day-lbl" for="d8" onclick="updateRecPreview()">CN</label>
+            </div>
+          </div>
+          <div class="fg fg2">
+            <div class="fl">
+              <label class="fl-label">Từ ngày <span class="fl-req">*</span></label>
+              <input type="date" id="wk-from" oninput="updateRecPreview()">
+            </div>
+            <div class="fl">
+              <label class="fl-label">Đến ngày <span class="fl-req">*</span></label>
+              <input type="date" id="wk-to" oninput="updateRecPreview()">
+            </div>
+          </div>
+          <div id="rec-preview-wrap" style="display:none">
+            <div class="rec-preview">
+              <div class="rp-head">Lịch buổi sẽ được tạo</div>
+              <div id="rec-preview-list"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TÓM TẮT -->
+        <div class="summary-box" id="wk-summary">
+          <div class="sum-row"><span class="sum-label">Khách hàng</span><span class="sum-val" id="sum-name">—</span></div>
+          <div class="sum-row"><span class="sum-label">Sân & giờ</span><span class="sum-val" id="sum-slot">—</span></div>
+          <div class="sum-row" id="sum-days-row" style="display:none"><span class="sum-label">Số buổi</span><span class="sum-val" id="sum-days">—</span></div>
+          <div class="sum-row"><span class="sum-label">Phương thức TT</span><span class="sum-val" id="sum-pay">Tiền mặt</span></div>
+          <div class="sum-row total"><span class="sum-label">Tổng tiền</span><span class="sum-val" id="sum-total">0đ</span></div>
+        </div>
+
+        <div style="display:flex;gap:8px">
+          <button class="btn" style="flex:1;justify-content:center" onclick="resetForm()"><i class="ti ti-x"></i>Huỷ</button>
+          <button class="btn btn-primary" style="flex:2;justify-content:center" onclick="saveWalkin()"><i class="ti ti-check"></i>Lưu booking bộ hành</button>
+        </div>
+      </div>
+
+      <!-- DANH SÁCH BỘ HÀNH -->
+      <div id="p-walkin-list" class="panel">
+        <div class="page-head">
+          <div class="page-title"><i class="ti ti-list"></i>Danh sách bộ hành</div>
+          <div class="page-actions">
+            <button class="btn btn-primary" onclick="nav('walkin',document.querySelector('[onclick*=walkin]'))"><i class="ti ti-plus"></i>Nhập mới</button>
+          </div>
+        </div>
+        <div class="metric-grid mg3" style="margin-bottom:12px">
+          <div class="met"><div class="met-label"><i class="ti ti-calendar-event"></i>Đặt một lần</div><div class="met-val">12</div><div class="met-note">tháng 5</div></div>
+          <div class="met"><div class="met-label"><i class="ti ti-calendar-repeat"></i>Đặt cố định</div><div class="met-val">8</div><div class="met-note">hợp đồng đang chạy</div></div>
+          <div class="met"><div class="met-label"><i class="ti ti-cash"></i>Doanh thu bộ hành</div><div class="met-val">8.4M</div><div class="met-note">tháng 5</div></div>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:12px;align-items:center">
+          <select style="font-size:11px;padding:5px 9px;border:1px solid var(--border-md);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-primary);cursor:pointer;font-family:var(--font)">
+            <option>Tất cả loại</option><option>Đặt một lần</option><option>Đặt cố định</option>
+          </select>
+          <select style="font-size:11px;padding:5px 9px;border:1px solid var(--border-md);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-primary);cursor:pointer;font-family:var(--font)">
+            <option>Tháng 5</option><option>Tháng 4</option><option>Tháng 3</option>
+          </select>
+        </div>
+
+        <div id="wl-dynamic"></div>
+
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-tertiary);margin-bottom:8px">Đặt cố định — đang hoạt động</div>
+        <div class="wl-item">
+          <div class="wl-av" style="background:var(--bg-success);color:var(--text-success)">NT</div>
+          <div class="wl-body">
+            <div class="wl-name">Nguyễn Thanh Bình</div>
+            <div class="wl-detail">Sân A1 · 07:00–08:00 · T3, T5 mỗi tuần<br>Từ 01/05 đến 31/05/2025 · 8 buổi · Chuyển khoản</div>
+            <div class="wl-actions">
+              <button class="btn" style="font-size:10px;padding:3px 9px"><i class="ti ti-edit" style="font-size:12px"></i>Sửa</button>
+              <button class="btn" style="font-size:10px;padding:3px 9px"><i class="ti ti-calendar" style="font-size:12px"></i>Xem lịch</button>
+            </div>
+          </div>
+          <div class="wl-right">
+            <div class="wl-amount">520k</div>
+            <div class="wl-badge wlb-rec">Cố định</div>
+          </div>
+        </div>
+        <div class="wl-item">
+          <div class="wl-av" style="background:var(--bg-info);color:var(--text-info)">PH</div>
+          <div class="wl-body">
+            <div class="wl-name">Phòng HR Công ty ABC</div>
+            <div class="wl-detail">Sân B1+B2 · 17:00–19:00 · T6 mỗi tuần<br>Từ 01/05 đến 31/05/2025 · 4 buổi · Hóa đơn VAT</div>
+            <div class="wl-actions">
+              <button class="btn" style="font-size:10px;padding:3px 9px"><i class="ti ti-edit" style="font-size:12px"></i>Sửa</button>
+              <button class="btn" style="font-size:10px;padding:3px 9px"><i class="ti ti-calendar" style="font-size:12px"></i>Xem lịch</button>
+            </div>
+          </div>
+          <div class="wl-right">
+            <div class="wl-amount">720k</div>
+            <div class="wl-badge wlb-rec">Cố định</div>
+          </div>
+        </div>
+
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-tertiary);margin:12px 0 8px">Đặt một lần — hôm nay</div>
+        <div class="wl-item">
+          <div class="wl-av" style="background:var(--bg-secondary);color:var(--text-tertiary)">KT</div>
+          <div class="wl-body">
+            <div class="wl-name">Khách vãng lai</div>
+            <div class="wl-detail">Sân A2 · 08:00–09:00 · 25/05/2025<br>Tiền mặt · Không có tên</div>
+          </div>
+          <div class="wl-right">
+            <div class="wl-amount">65k</div>
+            <div class="wl-badge wlb-once">Một lần</div>
+          </div>
+        </div>
+        <div class="wl-item">
+          <div class="wl-av" style="background:var(--bg-warning);color:var(--text-warning)">DT</div>
+          <div class="wl-body">
+            <div class="wl-name">Dũng Trung</div>
+            <div class="wl-detail">Sân B2 · 06:00–07:00 · 25/05/2025<br>Chuyển khoản · 0908 111 222</div>
+          </div>
+          <div class="wl-right">
+            <div class="wl-amount">65k</div>
+            <div class="wl-badge wlb-once">Một lần</div>
+          </div>
+        </div>
+      </div>
+
     </div><!-- end main -->
   </div><!-- end body-layout -->
 </div><!-- end portal -->
 
 <script>
+let sidebarOpen = true;
+function toggleSidebar() {
+  sidebarOpen = !sidebarOpen;
+  const sb = document.querySelector('.sidebar');
+  const icon = document.getElementById('toggle-icon');
+  sb.classList.toggle('collapsed', !sidebarOpen);
+  if (icon) {
+    icon.className = sidebarOpen ? 'ti ti-menu-2' : 'ti ti-layout-sidebar-left-collapse';
+  }
+  // Store preference
+  try { localStorage.setItem('smash_sidebar', sidebarOpen ? '1' : '0'); } catch(e){}
+}
+
+// Restore sidebar state on load
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    const stored = localStorage.getItem('smash_sidebar');
+    if (stored === '0') {
+      sidebarOpen = true;
+      toggleSidebar();
+    }
+  } catch(e) {}
+});
+
+// Set today as default date
+window.addEventListener('DOMContentLoaded', () => {
+  const today = new Date().toISOString().split('T')[0];
+  const d = document.getElementById('wk-date');
+  const f = document.getElementById('wk-from');
+  if (d) d.value = today;
+  if (f) {
+    f.value = today;
+    const to = document.getElementById('wk-to');
+    const end = new Date(); end.setDate(end.getDate()+28);
+    if (to) to.value = end.toISOString().split('T')[0];
+  }
+  updateSummary();
+});
+
 function nav(id, el) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -597,6 +971,154 @@ function nav(id, el) {
   if (p) p.classList.add('active');
   document.querySelector('.main').scrollTop = 0;
 }
+
+let currentType = 'once';
+
+function selectType(t) {
+  currentType = t;
+  document.getElementById('type-once').classList.toggle('sel', t === 'once');
+  document.getElementById('type-rec').classList.toggle('sel', t === 'rec');
+  document.getElementById('once-fields').style.display = t === 'once' ? 'block' : 'none';
+  document.getElementById('rec-fields').style.display = t === 'rec' ? 'block' : 'none';
+  document.getElementById('sum-days-row').style.display = t === 'rec' ? 'flex' : 'none';
+  updateSummary();
+}
+
+function fmt(n) {
+  return n.toLocaleString('vi-VN') + 'đ';
+}
+
+function updateSummary() {
+  const name = document.getElementById('wk-name')?.value || '';
+  const phone = document.getElementById('wk-phone')?.value || '';
+  const court = document.getElementById('wk-court')?.value || '';
+  const start = document.getElementById('wk-start')?.value || '';
+  const hours = parseFloat(document.getElementById('wk-hours')?.value || 1);
+  const price = parseInt(document.getElementById('wk-price')?.value || 0);
+  const pay = document.getElementById('wk-pay')?.value || 'cash';
+  const payLabels = {cash:'Tiền mặt',transfer:'Chuyển khoản',momo:'MoMo',zalopay:'ZaloPay',unpaid:'Chưa thanh toán'};
+
+  // Auto-fill price based on hour
+  if (start) {
+    const h = parseInt(start);
+    const pp = document.getElementById('wk-price');
+    if (pp && !pp.dataset.manual) {
+      pp.value = (h >= 17 && h <= 21) ? 90000 : 65000;
+    }
+  }
+
+  const priceVal = parseInt(document.getElementById('wk-price')?.value || 0);
+  const total = priceVal * hours;
+
+  document.getElementById('sum-name').textContent = name ? (name + (phone ? ' · ' + phone : '')) : '—';
+  document.getElementById('sum-slot').textContent = court && start ? ('Sân ' + court + ' · ' + start) : '—';
+  document.getElementById('sum-pay').textContent = payLabels[pay] || 'Tiền mặt';
+  document.getElementById('sum-total').textContent = fmt(total);
+
+  if (currentType === 'rec') {
+    const days = document.querySelectorAll('.day-cb:checked').length;
+    const from = document.getElementById('wk-from')?.value;
+    const to = document.getElementById('wk-to')?.value;
+    if (from && to && days > 0) {
+      const sessions = countSessions(from, to, days);
+      document.getElementById('sum-days').textContent = sessions + ' buổi';
+      document.getElementById('sum-total').textContent = fmt(total * sessions);
+    }
+    updateRecPreview();
+  }
+}
+
+function countSessions(from, to, daysPerWeek) {
+  const f = new Date(from), t = new Date(to);
+  const weeks = Math.ceil((t - f) / (7 * 86400000));
+  return weeks * daysPerWeek;
+}
+
+function updateRecPreview() {
+  setTimeout(updateSummary, 50);
+  const from = document.getElementById('wk-from')?.value;
+  const to = document.getElementById('wk-to')?.value;
+  const court = document.getElementById('wk-court')?.value || 'A1';
+  const start = document.getElementById('wk-start')?.value || '07:00';
+  const hours = parseFloat(document.getElementById('wk-hours')?.value || 1);
+  const checkedDays = Array.from(document.querySelectorAll('.day-cb:checked')).map(c => c.value);
+  const wrap = document.getElementById('rec-preview-wrap');
+  const list = document.getElementById('rec-preview-list');
+  if (!from || !to || checkedDays.length === 0 || !wrap || !list) { if(wrap) wrap.style.display='none'; return; }
+
+  const dayMap = {T2:1,T3:2,T4:3,T5:4,T6:5,T7:6,CN:0};
+  const endH = (parseInt(start) + Math.floor(hours)) + ':' + (hours % 1 === 0.5 ? '30' : '00');
+  const f = new Date(from), t = new Date(to);
+  const rows = [];
+  const cur = new Date(f);
+  const days = ['CN','T2','T3','T4','T5','T6','T7'];
+  while (cur <= t && rows.length < 6) {
+    const dayName = days[cur.getDay()];
+    if (checkedDays.includes(dayName)) {
+      rows.push(`<div class="rp-row"><span class="rp-date">${dayName}, ${cur.getDate()}/${cur.getMonth()+1}</span><span class="rp-info">Sân ${court} · ${start}–${endH}</span><span class="tag tag-gr" style="font-size:10px">Sẽ tạo</span></div>`);
+    }
+    cur.setDate(cur.getDate()+1);
+  }
+  if (rows.length === 0) { wrap.style.display='none'; return; }
+  const total = countSessions(from, to, checkedDays.length);
+  if (total > 6) rows.push(`<div class="rp-row"><span class="rp-date">...</span><span class="rp-info">và ${total - 6} buổi tiếp theo</span></div>`);
+  list.innerHTML = rows.join('');
+  wrap.style.display = 'block';
+}
+
+const saved = [];
+function saveWalkin() {
+  const name = document.getElementById('wk-name')?.value.trim();
+  const court = document.getElementById('wk-court')?.value;
+  const start = document.getElementById('wk-start')?.value;
+  if (!name || !court || !start) { alert('Vui lòng điền đủ: họ tên, sân, giờ bắt đầu'); return; }
+  const hours = parseFloat(document.getElementById('wk-hours')?.value || 1);
+  const price = parseInt(document.getElementById('wk-price')?.value || 0);
+  const pay = document.getElementById('wk-pay')?.value || 'cash';
+  const payLabels = {cash:'Tiền mặt',transfer:'Chuyển khoản',momo:'MoMo',zalopay:'ZaloPay',unpaid:'Chưa TT'};
+  const total = price * hours;
+  const isRec = currentType === 'rec';
+  const initials = name.split(' ').slice(-2).map(w=>w[0]).join('').toUpperCase();
+  const colors = ['av-g','av-b','av-a','av-r'];
+  const col = colors[saved.length % 4];
+  let detail = '';
+  if (isRec) {
+    const days = Array.from(document.querySelectorAll('.day-cb:checked')).map(c=>c.value).join(', ');
+    const from = document.getElementById('wk-from')?.value || '';
+    const to = document.getElementById('wk-to')?.value || '';
+    const sessions = countSessions(from, to, document.querySelectorAll('.day-cb:checked').length);
+    detail = `Sân ${court} · ${start} · ${days}<br>Từ ${from} đến ${to} · ${sessions} buổi · ${payLabels[pay]}`;
+  } else {
+    const date = document.getElementById('wk-date')?.value || '';
+    detail = `Sân ${court} · ${start} · ${date}<br>${payLabels[pay]}`;
+  }
+  saved.push({initials, col, name, detail, total, isRec});
+  renderSaved();
+  resetForm();
+  nav('walkin-list', document.querySelector('[onclick*=walkin]'));
+}
+
+function renderSaved() {
+  const el = document.getElementById('wl-dynamic');
+  if (!el) return;
+  if (saved.length === 0) { el.innerHTML = ''; return; }
+  el.innerHTML = `<div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-tertiary);margin-bottom:8px">Vừa nhập</div>` +
+    saved.map(s => `<div class="wl-item"><div class="wl-av ${s.col}">${s.initials}</div><div class="wl-body"><div class="wl-name">${s.name}</div><div class="wl-detail">${s.detail}</div></div><div class="wl-right"><div class="wl-amount">${(s.total/1000).toFixed(0)}k</div><div class="wl-badge ${s.isRec?'wlb-rec':'wlb-once'}">${s.isRec?'Cố định':'Một lần'}</div></div></div>`).join('');
+}
+
+function resetForm() {
+  ['wk-name','wk-phone','wk-note'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const court=document.getElementById('wk-court');if(court)court.value='';
+  const start=document.getElementById('wk-start');if(start)start.value='';
+  const price=document.getElementById('wk-price');if(price){price.value='65000';delete price.dataset.manual;}
+  document.querySelectorAll('.day-cb').forEach(c=>c.checked=false);
+  selectType('once');
+  updateSummary();
+}
+
+document.addEventListener('input', e => {
+  if (e.target.id === 'wk-price') e.target.dataset.manual = '1';
+});
 </script>
 </body>
 </html>
