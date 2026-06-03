@@ -1417,6 +1417,141 @@ function closeBD() {
   if (el) el.classList.remove('show');
 }
 
+
+/* ── QUICK BOOK FROM CALENDAR (+) ──────────────────── */
+var qbData = {};
+var qbType = 'once';
+
+function quickBook(el) {
+  var row = el.closest('.cal-row-g');
+  var cell = el.closest('.cal-cell');
+  var timeEl = row ? row.querySelector('.time-col') : null;
+  var time = timeEl ? timeEl.textContent.trim() : '07:00';
+  var cells = row ? Array.from(row.querySelectorAll('.cal-cell')) : [];
+  var cellIdx = cells.indexOf(cell);
+  var courts = ['A1','A2','B1','B2'];
+  var court = courts[cellIdx] || 'A1';
+  var hour = parseInt(time);
+  var price = (hour >= 17 && hour <= 21) ? 90000 : 65000;
+  var endHour = hour + 1;
+  var endTime = (endHour < 10 ? '0' : '') + endHour + ':00';
+
+  qbData = { court: court, time: time, endTime: endTime, price: price, el: cell };
+
+  document.getElementById('qb-slot-label').textContent = 'Sân ' + court + ' · ' + time + '–' + endTime;
+  document.getElementById('qb-price-lbl').textContent = price.toLocaleString('vi-VN') + 'đ';
+  document.getElementById('qb-name').value = '';
+  document.getElementById('qb-phone').value = '';
+  document.getElementById('qb-hours').value = '1';
+  document.getElementById('qb-pay').value = 'cash';
+
+  var today = new Date().toISOString().split('T')[0];
+  var endDate = new Date(); endDate.setDate(endDate.getDate() + 28);
+  var qbFrom = document.getElementById('qb-from');
+  var qbTo = document.getElementById('qb-to');
+  if (qbFrom) qbFrom.value = today;
+  if (qbTo) qbTo.value = endDate.toISOString().split('T')[0];
+
+  selectQBType('once');
+  updateQBTotal();
+  document.getElementById('qb-overlay').classList.add('show');
+  setTimeout(function(){ var n = document.getElementById('qb-name'); if(n) n.focus(); }, 100);
+}
+
+function closeQB() {
+  var el = document.getElementById('qb-overlay');
+  if (el) el.classList.remove('show');
+}
+
+function selectQBType(t) {
+  qbType = t;
+  var once = document.getElementById('qbt-once');
+  var rec  = document.getElementById('qbt-rec');
+  var recRow = document.getElementById('qb-rec-row');
+  if (once) once.classList.toggle('sel', t === 'once');
+  if (rec)  rec.classList.toggle('sel', t === 'rec');
+  if (recRow) recRow.classList.toggle('show', t === 'rec');
+  updateQBTotal();
+}
+
+function updateQBTotal() {
+  var hours = parseFloat(document.getElementById('qb-hours') ? document.getElementById('qb-hours').value : 1) || 1;
+  var total = (qbData.price || 65000) * hours;
+  var el = document.getElementById('qb-total');
+  if (el) el.textContent = total.toLocaleString('vi-VN') + 'đ';
+}
+
+function saveQB() {
+  var nameEl  = document.getElementById('qb-name');
+  var phoneEl = document.getElementById('qb-phone');
+  var hoursEl = document.getElementById('qb-hours');
+  var payEl   = document.getElementById('qb-pay');
+
+  var name  = (nameEl && nameEl.value.trim()) ? nameEl.value.trim() : 'Khach vang lai';
+  var phone = phoneEl ? phoneEl.value.trim() : '';
+  var hours = parseFloat(hoursEl ? hoursEl.value : 1) || 1;
+  var pay   = payEl ? payEl.value : 'cash';
+  var payLabels = {cash:'Tien mat', transfer:'Chuyen khoan', momo:'MoMo', zalopay:'ZaloPay', unpaid:'Chua TT'};
+  var total = (qbData.price || 65000) * hours;
+  var shortName = name.split(' ').pop();
+  var displayLabel = (qbType === 'rec' ? 'Co dinh: ' : '') + shortName;
+  var payLabel = payLabels[pay] || 'Tien mat';
+  var amountStr = (total/1000).toFixed(0) + 'k';
+  var typeStr = qbType === 'rec' ? 'rec' : 'once';
+
+  if (qbData.el) {
+    var div = document.createElement('div');
+    div.className = 'slot s-walk';
+    div.style.cursor = 'pointer';
+    div.title = name;
+    div.innerHTML = displayLabel + '<br>' + amountStr;
+    div.addEventListener('click', (function(n, court, t, et, amt, pl, tp) {
+      return function() { viewWalkinBooking(n, court, t, et, amt, pl, tp); };
+    })(name, qbData.court, qbData.time, qbData.endTime, amountStr, payLabel, typeStr));
+    qbData.el.innerHTML = '';
+    qbData.el.appendChild(div);
+  }
+
+  if (typeof saved !== 'undefined') {
+    var initials = name.split(' ').slice(-2).map(function(w){ return w[0]; }).join('').toUpperCase();
+    saved.push({
+      initials: initials,
+      col: 'av-a',
+      name: name + (phone ? ' - ' + phone : ''),
+      detail: 'San ' + qbData.court + ' - ' + qbData.time + ' - ' + (qbType === 'rec' ? 'Co dinh' : 'Hom nay') + '<br>' + payLabel,
+      total: total,
+      isRec: qbType === 'rec'
+    });
+    if (typeof renderSaved === 'function') renderSaved();
+  }
+  closeQB();
+}
+
+/* View booking created via quick-book */
+function viewWalkinBooking(name, court, startTime, endTime, amount, pay, type) {
+  name = decodeURIComponent(name);
+  var avEl = document.getElementById('bd-avatar');
+  avEl.textContent = name === 'Khách vãng lai' ? 'KV' : name.split(' ').slice(-2).map(function(w){return w[0];}).join('').toUpperCase();
+  avEl.style.background = '#fdf3e3';
+  avEl.style.color = '#92600a';
+  document.getElementById('bd-customer').textContent = name;
+  document.getElementById('bd-phone').textContent = 'Không có SĐT';
+  document.getElementById('bd-court').textContent = 'Sân ' + court;
+  document.getElementById('bd-time').textContent = startTime + '–' + endTime;
+  document.getElementById('bd-pay').textContent = pay;
+  document.getElementById('bd-amount').textContent = amount;
+  document.getElementById('bd-type-lbl').textContent = type === 'rec' ? 'Đặt cố định tại quầy' : 'Đặt tại quầy';
+  var statusEl = document.getElementById('bd-status-val');
+  statusEl.innerHTML = pay === 'Chưa TT'
+    ? '<span class="bd-tag" style="background:var(--bg-warning);color:var(--text-warning)">⏳ Chờ thanh toán</span>'
+    : '<span class="bd-tag" style="background:var(--bg-success);color:var(--text-success)">✓ Đã thanh toán</span>';
+  var noteWrap = document.getElementById('bd-note-wrap');
+  if (noteWrap) noteWrap.style.display = 'none';
+  var payRow = document.getElementById('bd-tl-pay-row');
+  if (payRow) payRow.style.display = pay !== 'Chưa TT' ? 'flex' : 'none';
+  document.getElementById('bd-overlay').classList.add('show');
+}
+
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') { closeBD(); if(typeof closeQB === 'function') closeQB(); }
 });
