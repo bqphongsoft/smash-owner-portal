@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Smash — Đặt sân cầu lông</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --green:#1B7A47;--green2:#24A361;--green3:#E3F5EC;--green4:#B8E8CC;
+  --ink:#0B1A12;--ink2:#2C3E34;--ink3:#637068;--ink4:#98A89E;
+  --surface:#F4F8F5;--white:#FFFFFF;
+  --accent:#FF5C35;--accent2:#FFF0EB;
+  --gold:#C9A84C;--gold2:#FDF6E3;
+  --border:#DDE8E2;--border2:#EBF3EE;
+  --font:'Be Vietnam Pro',sans-serif;--mono:'DM Mono',monospace;
+}
+
+html,body{height:100%;overflow:hidden;background:#1a1a1a}
+/* Desktop hint text */
+body::before{
+  content:'Smash App Prototype';
+  position:fixed;top:16px;left:50%;transform:translateX(-50%);
+  font-family:var(--font);font-size:11px;font-weight:600;
+  color:rgba(255,255,255,.3);letter-spacing:.08em;text-transform:uppercase;
+  pointer-events:none;z-index:0;
+}
+@media(max-width:430px){body::before{display:none}}
+@media(max-height:700px) and (min-width:431px){body::before{display:none}}
+
+/* PHONE SHELL — desktop view */
+.phone-shell{
+  width:390px;height:844px;
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  border-radius:44px;overflow:hidden;
+  box-shadow:0 0 0 10px #1A1A1A,0 0 0 12px #2A2A2A,0 40px 80px rgba(0,0,0,.6);
+  background:var(--surface);
+}
+/* Khi viewport quá thấp để hiện full phone shell */
+@media(max-height:870px) and (min-width:431px){
+  .phone-shell{
+    height:calc(100vh - 24px);
+    top:50%;
+    transform:translate(-50%,-50%);
+    border-radius:32px;
+  }
+}
+@media(max-height:700px) and (min-width:431px){
+  .phone-shell{
+    height:100vh;
+    top:0;
+    transform:translateX(-50%);
+    border-radius:0;
+    box-shadow:none;
+  }
+}
+/* Mobile: fill full screen */
+@media(max-width:430px){
+  html,body{background:var(--surface)}
+  .phone-shell{width:100%;height:100%;border-radius:0;position:fixed;top:0;left:0;transform:none;box-shadow:none}
+}
+
+/* STATUS BAR */
+.status{height:48px;background:var(--ink);display:flex;align-items:center;justify-content:space-between;padding:14px 20px 0;flex-shrink:0}
+.status::after{content:'';position:absolute;top:14px;left:50%;transform:translateX(-50%);width:120px;height:32px;background:#000;border-radius:20px;pointer-events:none}
+.status-time{font-family:var(--mono);font-size:15px;font-weight:500;color:#fff;z-index:1;position:relative}
+.status-icons{display:flex;gap:5px;z-index:1;position:relative;align-items:center}
+.status-icons span{font-size:11px;color:rgba(255,255,255,.85);font-family:var(--mono)}
+
+/* SCREEN CONTAINER */
+.screens{flex:1;position:relative;overflow:hidden;height:calc(100% - 48px)}
+.screen{position:absolute;inset:0;background:var(--surface);display:flex;flex-direction:column;overflow:hidden;transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .3s}
+.screen.active{transform:translateX(0);opacity:1;pointer-events:all;z-index:2}
+.screen.hidden-right{transform:translateX(100%);opacity:0;pointer-events:none;z-index:1}
+.screen.hidden-left{transform:translateX(-100%);opacity:0;pointer-events:none;z-index:1}
+.screen.slide-up{transform:translateY(100%);opacity:0;pointer-events:none;z-index:3}
+.screen.slide-up.active{transform:translateY(0);opacity:1}
+
+/* SCROLLABLE BODY */
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+
+/* BACK BUTTON */
+.back-btn{display:flex;align-items:center;gap:4px;font-size:13px;color:var(--green);font-weight:500;cursor:pointer;padding:4px 0;background:none;border:none;font-family:var(--font)}
+.back-btn i{font-size:18px}
+
+/* HERO HEADER */
+.hero{background:var(--ink);padding:14px 20px 0;position:relative;overflow:hidden;flex-shrink:0}
+.hero::after{content:'';position:absolute;right:-20px;top:-10px;width:160px;height:160px;background:radial-gradient(circle,rgba(27,122,71,.3) 0%,transparent 70%);pointer-events:none}
+.hero-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative;z-index:1}
+.logo{font-size:20px;font-weight:800;color:#fff;letter-spacing:-.5px}
+.logo span{color:var(--green2)}
+.hero-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green2));border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;position:relative}
+.notif-dot{position:absolute;top:-2px;right:-2px;width:9px;height:9px;background:var(--accent);border-radius:50%;border:2px solid var(--ink)}
+.hero-greet{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:3px;position:relative;z-index:1}
+.hero-title{font-size:24px;font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.5px;margin-bottom:18px;position:relative;z-index:1}
+.hero-title em{font-style:normal;color:var(--green2)}
+
+/* SEARCH BAR */
+.search-bar{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:14px;display:flex;align-items:center;padding:10px 14px;gap:10px;margin-bottom:14px;cursor:pointer;position:relative;z-index:1}
+.search-bar:active{background:rgba(255,255,255,.15)}
+.search-icon-wrap{width:26px;height:26px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.search-icon-wrap i{font-size:13px;color:#fff}
+.search-text{flex:1;font-size:13px;color:rgba(255,255,255,.4)}
+.filter-chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:5px 9px;font-size:11px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:4px;cursor:pointer}
+.filter-badge-num{width:15px;height:15px;background:var(--accent);border-radius:50%;font-size:9px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center}
+
+/* FILTER PILLS */
+.pills{display:flex;gap:7px;padding:0 20px 14px;overflow-x:auto;scrollbar-width:none;background:var(--ink);flex-shrink:0}
+.pills::-webkit-scrollbar{display:none}
+.pill{flex-shrink:0;font-size:12px;font-weight:600;padding:7px 13px;border-radius:20px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.6);background:transparent;cursor:pointer;white-space:nowrap;font-family:var(--font)}
+.pill.active{background:var(--green);border-color:var(--green);color:#fff}
+
+/* BODY SECTION */
+.body{background:var(--surface);border-radius:22px 22px 0 0;margin-top:-12px;padding:0 0 80px;flex:1}
+
+/* LOYALTY STRIP */
+.loyalty{background:var(--ink);border-radius:14px;margin:16px 16px 0;padding:13px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;overflow:hidden;position:relative}
+.loyalty::before{content:'';position:absolute;right:-20px;top:-20px;width:90px;height:90px;background:radial-gradient(circle,rgba(27,122,71,.4),transparent 70%)}
+.loyalty-ico{width:38px;height:38px;background:linear-gradient(135deg,#C9A84C,#E8C96A);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.loyalty-info{flex:1;z-index:1}
+.loyalty-lbl{font-size:10px;color:rgba(255,255,255,.5);margin-bottom:2px}
+.loyalty-pts{font-size:20px;font-weight:700;color:#fff;font-family:var(--mono);line-height:1;margin-bottom:5px}
+.loyalty-bar-bg{background:rgba(255,255,255,.15);border-radius:20px;height:4px}
+.loyalty-bar-fill{height:4px;border-radius:20px;background:linear-gradient(90deg,var(--green2),#68D9A0);width:62%}
+.loyalty-hint{font-size:9.5px;color:rgba(255,255,255,.4);margin-top:3px}
+.loyalty-tier{background:linear-gradient(135deg,#C9A84C,#E8C96A);color:var(--ink);font-size:10px;font-weight:800;padding:3px 9px;border-radius:20px;z-index:1}
+
+/* SECTION HEADER */
+.sec-head{display:flex;align-items:center;justify-content:space-between;padding:18px 16px 10px}
+.sec-title{font-size:15px;font-weight:700;color:var(--ink);letter-spacing:-.3px}
+.sec-link{font-size:12px;font-weight:600;color:var(--green);display:flex;align-items:center;gap:3px;cursor:pointer}
+
+/* COURT CARDS (horizontal scroll) */
+.courts-scroll{display:flex;gap:12px;padding:0 16px 4px;overflow-x:auto;scrollbar-width:none}
+.courts-scroll::-webkit-scrollbar{display:none}
+.court-card{flex-shrink:0;width:210px;background:var(--white);border-radius:18px;overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:transform .15s;box-shadow:0 2px 8px rgba(11,26,18,.06)}
+.court-card:active{transform:scale(.97)}
+.court-img{height:105px;position:relative;overflow:hidden}
+.court-img-bg{position:absolute;inset:0}
+.court-img-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.18) 1px,transparent 1px);background-size:55px 38px}
+.court-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(11,26,18,.5) 0%,transparent 55%)}
+.court-avail{position:absolute;top:9px;right:9px;background:var(--green2);color:#fff;font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:5px;display:flex;align-items:center;gap:3px}
+.avail-dot{width:5px;height:5px;border-radius:50%;background:#fff;animation:blink 1.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.court-dist{position:absolute;top:9px;left:9px;background:rgba(0,0,0,.45);color:#fff;font-size:9.5px;font-weight:600;padding:3px 7px;border-radius:5px;backdrop-filter:blur(4px)}
+.court-tags{position:absolute;bottom:8px;left:9px;display:flex;gap:4px}
+.court-tag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:rgba(0,0,0,.4);color:rgba(255,255,255,.85);backdrop-filter:blur(4px)}
+.court-tag.ac{background:rgba(27,122,71,.55);color:#fff}
+.court-body{padding:11px 13px 13px}
+.court-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px;letter-spacing:-.2px}
+.court-loc{font-size:11px;color:var(--ink3);margin-bottom:9px;display:flex;align-items:center;gap:3px}
+.court-loc i{font-size:10px}
+.slots-lbl{font-size:9.5px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.slots-row{display:flex;gap:4px;flex-wrap:wrap}
+.slot{font-size:9.5px;font-weight:600;padding:4px 7px;border-radius:5px;border:1px solid var(--border);color:var(--ink2);font-family:var(--mono);cursor:pointer}
+.slot.free{border-color:var(--green4);background:var(--green3);color:var(--green)}
+.slot.taken{background:var(--border2);color:var(--ink4);text-decoration:line-through;opacity:.6}
+.slot.peak{border-color:#FDDCB8;background:#FFF4E8;color:#C87833}
+.court-footer{display:flex;align-items:center;justify-content:space-between;margin-top:9px;padding-top:9px;border-top:1px solid var(--border2)}
+.court-price{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink)}
+.court-price span{font-size:10px;color:var(--ink3);font-family:var(--font);font-weight:400}
+.court-rating{display:flex;align-items:center;gap:3px;font-size:11.5px;font-weight:600;color:var(--ink2)}
+.star{color:var(--gold)}
+
+/* PEAK BANNER */
+.peak-banner{margin:4px 16px 0;background:linear-gradient(135deg,#FF5C35,#FF8C35);border-radius:14px;padding:13px 14px;display:flex;align-items:center;gap:11px;cursor:pointer;overflow:hidden;position:relative}
+.peak-banner::before{content:'';position:absolute;right:-15px;top:-15px;width:90px;height:90px;background:rgba(255,255,255,.12);border-radius:50%}
+.peak-ico{width:38px;height:38px;background:rgba(255,255,255,.2);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.peak-text{flex:1;z-index:1}
+.peak-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:1px}
+.peak-sub{font-size:11px;color:rgba(255,255,255,.75)}
+.peak-arrow{color:rgba(255,255,255,.8);font-size:18px;z-index:1}
+
+/* COURT LIST ROWS */
+.courts-list{padding:0 16px}
+.court-row{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:12px 13px;margin-bottom:9px;display:flex;gap:12px;cursor:pointer;box-shadow:0 1px 4px rgba(11,26,18,.04)}
+.court-row:active{transform:scale(.99)}
+.row-img{width:64px;height:64px;border-radius:10px;flex-shrink:0;position:relative;overflow:hidden}
+.row-img-bg{position:absolute;inset:0}
+.row-img-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.2) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.2) 1px,transparent 1px);background-size:18px 14px}
+.row-body{flex:1;min-width:0}
+.row-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.2px}
+.row-loc{font-size:11px;color:var(--ink3);margin-bottom:7px;display:flex;align-items:center;gap:2px}
+.row-loc i{font-size:10px}
+.row-slots{display:flex;gap:3px;flex-wrap:wrap}
+.row-right{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;flex-shrink:0}
+.row-price{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--ink);text-align:right}
+.row-price .per{font-size:10px;color:var(--ink3);font-family:var(--font);font-weight:400;display:block}
+.row-rating{display:flex;align-items:center;gap:2px;font-size:11px;font-weight:600;color:var(--ink2)}
+.row-avail{font-size:10px;font-weight:700;color:var(--green);background:var(--green3);padding:2px 7px;border-radius:5px}
+
+/* BOTTOM NAV */
+.bottom-nav{position:absolute;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:10px 0 max(22px,env(safe-area-inset-bottom));z-index:10}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 18px}
+.nav-icon{width:26px;height:26px;border-radius:9px;display:flex;align-items:center;justify-content:center;transition:background .12s}
+.nav-btn.active .nav-icon{background:var(--green3)}
+.nav-btn i{font-size:19px}
+.nav-btn.active i{color:var(--green)}
+.nav-btn:not(.active) i{color:var(--ink4)}
+.nav-lbl{font-size:10px;font-weight:600}
+.nav-btn.active .nav-lbl{color:var(--green)}
+.nav-btn:not(.active) .nav-lbl{color:var(--ink4)}
+.nav-center{width:52px;height:52px;background:linear-gradient(135deg,var(--green),var(--green2));border-radius:18px;display:flex;align-items:center;justify-content:center;margin-top:-12px;box-shadow:0 6px 20px rgba(27,122,71,.5),0 2px 8px rgba(27,122,71,.3);cursor:pointer;transition:transform .1s}
+.nav-center:active{transform:scale(.93)}
+.nav-center i{font-size:22px;color:#fff}
+.nav-btn:active .nav-icon{transform:scale(.88);transition:transform .1s}
+
+/* COURT DETAIL */
+.court-detail-img{height:220px;position:relative;flex-shrink:0;overflow:hidden}
+.detail-back{position:absolute;top:16px;left:16px;z-index:2;width:36px;height:36px;background:rgba(0,0,0,.4);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(8px)}
+.detail-back i{font-size:20px;color:#fff}
+.detail-share{position:absolute;top:16px;right:16px;z-index:2;width:36px;height:36px;background:rgba(0,0,0,.4);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(8px)}
+.detail-share i{font-size:18px;color:#fff}
+.detail-avail-badge{position:absolute;bottom:14px;left:16px;background:var(--green2);color:#fff;font-size:11px;font-weight:700;padding:5px 12px;border-radius:8px;display:flex;align-items:center;gap:5px}
+.detail-body{padding:16px}
+.detail-name{font-size:20px;font-weight:800;color:var(--ink);letter-spacing:-.4px;margin-bottom:4px}
+.detail-meta{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.detail-meta-item{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--ink3)}
+.detail-meta-item i{font-size:14px}
+.detail-rating{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:700;color:var(--ink)}
+.amenity-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.amenity{display:flex;align-items:center;gap:5px;background:var(--green3);border:1px solid var(--green4);border-radius:8px;padding:5px 10px;font-size:12px;color:var(--green);font-weight:500}
+.amenity i{font-size:14px}
+.section-title-sm{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px;letter-spacing:-.2px}
+.date-row{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;margin-bottom:14px;padding-bottom:2px}
+.date-row::-webkit-scrollbar{display:none}
+.date-chip{flex-shrink:0;text-align:center;padding:8px 12px;border-radius:10px;border:1px solid var(--border);cursor:pointer;transition:all .12s}
+.date-chip.active{background:var(--green);border-color:var(--green)}
+.date-chip .day{font-size:14px;font-weight:700;margin-bottom:1px}
+.date-chip .wd{font-size:10px;font-weight:500}
+.date-chip:not(.active) .day,.date-chip:not(.active) .wd{color:var(--ink2)}
+.date-chip.active .day,.date-chip.active .wd{color:#fff}
+.slot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:16px}
+.slot-chip{text-align:center;padding:9px 0;border-radius:10px;border:1px solid var(--border);font-size:11px;font-family:var(--mono);font-weight:600;cursor:pointer;transition:all .12s;color:var(--ink2)}
+.slot-chip.free{border-color:var(--green4);background:var(--green3);color:var(--green)}
+.slot-chip.taken{background:var(--border2);color:var(--ink4);opacity:.55;text-decoration:line-through;cursor:not-allowed}
+.slot-chip.selected{background:var(--green);border-color:var(--green);color:#fff}
+.slot-chip.peak{border-color:#FDDCB8;background:#FFF4E8;color:#C87833}
+.addons{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.addon{flex:1;min-width:0;border:1.5px solid var(--border);border-radius:10px;padding:9px 11px;cursor:pointer;transition:all .12s}
+.addon.sel{border-color:var(--green);background:var(--green3)}
+.addon-name{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.addon.sel .addon-name{color:var(--green)}
+.addon-price{font-size:11px;color:var(--ink3)}
+.addon.sel .addon-price{color:var(--green)}
+.sticky-footer{padding:12px 16px 0;border-top:1px solid var(--border2);background:var(--white);flex-shrink:0}
+.price-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.price-lbl{font-size:12px;color:var(--ink3)}
+.price-val{font-size:20px;font-weight:700;color:var(--ink);font-family:var(--mono)}
+.btn-book{display:block;width:100%;background:var(--green);color:#fff;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;transition:background .12s;margin-bottom:14px}
+.btn-book:active{background:#155f38}
+
+/* BOOKING CONFIRM */
+.confirm-screen .scroll{padding:20px 16px}
+.confirm-title{font-size:18px;font-weight:800;color:var(--ink);margin-bottom:4px;letter-spacing:-.4px}
+.confirm-sub{font-size:13px;color:var(--ink3);margin-bottom:20px}
+.confirm-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px}
+.confirm-card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);margin-bottom:12px}
+.confirm-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border2)}
+.confirm-row:last-child{border-bottom:none}
+.confirm-lbl{font-size:13px;color:var(--ink3);display:flex;align-items:center;gap:6px}
+.confirm-lbl i{font-size:15px}
+.confirm-val{font-size:13px;font-weight:500;color:var(--ink)}
+.confirm-total{font-size:18px;font-weight:700;color:var(--ink);font-family:var(--mono)}
+.pay-methods{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.pay-method{display:flex;align-items:center;gap:12px;background:var(--white);border:2px solid var(--border);border-radius:12px;padding:12px 14px;cursor:pointer;transition:all .12s}
+.pay-method.active{border-color:var(--green);background:var(--green3)}
+.pay-method-logo{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.pay-method-name{font-size:13px;font-weight:600;color:var(--ink);flex:1}
+.pay-method.active .pay-method-name{color:var(--green)}
+.pay-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--border-md,#ccc);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.pay-method.active .pay-radio{border-color:var(--green);background:var(--green)}
+.pay-radio-dot{width:7px;height:7px;border-radius:50%;background:#fff;display:none}
+.pay-method.active .pay-radio-dot{display:block}
+
+/* SUCCESS SCREEN */
+.success-screen{background:var(--white)}
+.success-hero{background:var(--ink);padding:48px 24px 32px;text-align:center}
+.success-icon{width:72px;height:72px;background:var(--green);border-radius:24px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:34px}
+.success-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:6px;letter-spacing:-.4px}
+.success-sub{font-size:13px;color:rgba(255,255,255,.55)}
+.success-body{padding:20px 16px}
+.booking-code-card{background:var(--green3);border:2px dashed var(--green4);border-radius:14px;padding:16px;text-align:center;margin-bottom:16px}
+.booking-code-lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--green);margin-bottom:6px}
+.booking-code{font-size:28px;font-weight:800;color:var(--ink);font-family:var(--mono);letter-spacing:.1em}
+.points-toast{background:var(--ink);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.points-icon{width:40px;height:40px;background:linear-gradient(135deg,#C9A84C,#E8C96A);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.points-info{flex:1}
+.points-earned{font-size:18px;font-weight:700;color:#fff;font-family:var(--mono)}
+.points-lbl{font-size:11px;color:rgba(255,255,255,.5)}
+.btn-secondary{display:block;width:100%;background:var(--surface);color:var(--ink);border:1.5px solid var(--border);border-radius:14px;padding:13px;font-size:14px;font-weight:600;font-family:var(--font);cursor:pointer;margin-bottom:10px;transition:background .12s}
+.btn-secondary:active{background:var(--border2)}
+.btn-home{display:block;width:100%;background:var(--green);color:#fff;border:none;border-radius:14px;padding:14px;font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;transition:background .12s;margin-bottom:20px}
+
+/* TOP NAV WITH BACK */
+.top-nav{display:flex;align-items:center;gap:10px;padding:14px 16px 10px;background:var(--white);border-bottom:1px solid var(--border2);flex-shrink:0}
+.top-nav-title{font-size:15px;font-weight:700;color:var(--ink);letter-spacing:-.3px}
+
+/* LOADING */
+.loader-overlay{position:absolute;inset:0;background:rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;z-index:50;backdrop-filter:blur(4px)}
+.loader{width:40px;height:40px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--green);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* BOOKING LIST SCREEN */
+.bk-header{background:var(--ink);padding:14px 20px 16px;flex-shrink:0}
+.bk-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.bk-header-title{font-size:18px;font-weight:800;color:#fff;letter-spacing:-.4px}
+.bk-header-sub{font-size:12px;color:rgba(255,255,255,.45)}
+.bk-tabs{display:flex;gap:4px;background:rgba(255,255,255,.08);border-radius:12px;padding:3px}
+.bk-tab{flex:1;text-align:center;font-size:12px;font-weight:600;padding:7px 0;border-radius:9px;cursor:pointer;color:rgba(255,255,255,.5);transition:all .15s;font-family:var(--font)}
+.bk-tab.on{background:var(--white);color:var(--ink)}
+
+.bk-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 16px 0}
+.bk-stat{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:11px 12px;text-align:center}
+.bk-stat-val{font-size:20px;font-weight:700;font-family:var(--mono);color:var(--ink);margin-bottom:2px}
+.bk-stat-lbl{font-size:10px;color:var(--ink3)}
+.bk-stat-val.green{color:var(--green)}
+
+.bk-section-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);padding:16px 16px 8px}
+
+.bk-card{background:var(--white);border:1px solid var(--border);border-radius:16px;margin:0 16px 10px;overflow:hidden;cursor:pointer;transition:transform .12s;box-shadow:0 1px 4px rgba(11,26,18,.05)}
+.bk-card:active{transform:scale(.98)}
+.bk-card-top{padding:13px 14px;border-bottom:1px solid var(--border2)}
+.bk-card-court{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px;letter-spacing:-.2px}
+.bk-card-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.bk-card-meta-item{display:flex;align-items:center;gap:3px;font-size:11.5px;color:var(--ink3)}
+.bk-card-meta-item i{font-size:13px}
+.bk-card-body{padding:11px 14px;display:flex;align-items:center;justify-content:space-between}
+.bk-card-price{font-size:15px;font-weight:700;font-family:var(--mono);color:var(--ink)}
+.bk-card-pay{font-size:11px;color:var(--ink3);margin-top:1px}
+.bk-status{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px}
+.bks-confirmed{background:var(--green3);color:var(--green)}
+.bks-pending{background:var(--gold2);color:#92600A}
+.bks-cancelled{background:#FEE2E2;color:#B91C1C}
+.bks-completed{background:var(--border2);color:var(--ink3)}
+.bk-card-code{font-size:11px;font-family:var(--mono);color:var(--ink3);background:var(--surface);border-radius:6px;padding:3px 7px}
+
+.bk-points-pill{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--green);background:var(--green3);padding:3px 8px;border-radius:20px}
+.bk-points-pill i{font-size:12px}
+
+.bk-detail-overlay{position:absolute;inset:0;background:var(--white);z-index:20;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.bk-detail-overlay.show{transform:translateY(0)}
+.bk-detail-hero{background:linear-gradient(160deg,var(--ink) 50%,#0F5233);padding:48px 20px 24px;text-align:center;flex-shrink:0}
+.bk-status-icon{width:56px;height:56px;border-radius:20px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:26px}
+.bk-detail-court{font-size:18px;font-weight:800;color:#fff;margin-bottom:4px;letter-spacing:-.4px}
+.bk-detail-time{font-size:13px;color:rgba(255,255,255,.55)}
+.bk-detail-body{flex:1;overflow-y:auto;padding:16px}
+.bk-detail-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border2)}
+.bk-detail-row:last-child{border-bottom:none}
+.bk-detail-lbl{font-size:13px;color:var(--ink3);display:flex;align-items:center;gap:7px}
+.bk-detail-lbl i{font-size:15px;width:15px}
+.bk-detail-val{font-size:13px;font-weight:500;color:var(--ink);text-align:right;max-width:55%}
+.bk-detail-actions{display:flex;gap:8px;padding:12px 16px 28px;flex-shrink:0;border-top:1px solid var(--border2)}
+.bk-action-btn{flex:1;padding:12px;border-radius:14px;border:1.5px solid var(--border-md,#c8d8d0);background:var(--white);font-size:13px;font-weight:600;font-family:var(--font);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;color:var(--ink);transition:background .12s}
+.bk-action-btn:active{background:var(--surface)}
+.bk-action-btn.danger{border-color:rgba(153,27,27,.3);color:#B91C1C}
+.bk-action-btn.primary{background:var(--green);color:#fff;border-color:var(--green)}
+.bk-action-btn.primary:active{background:#155f38}
+.bk-action-btn i{font-size:16px}
+
+.bk-timeline{margin-top:4px}
+.bk-tl-item{display:flex;gap:10px;align-items:flex-start;padding:8px 0}
+.bk-tl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.bk-tl-line{width:2px;background:var(--border2);margin-left:3px;height:16px}
+.bk-tl-main{font-size:12.5px;font-weight:500;color:var(--ink)}
+.bk-tl-time{font-size:11px;color:var(--ink3);margin-top:2px;font-family:var(--mono)}
+
+.empty-state{text-align:center;padding:48px 24px}
+.empty-icon{font-size:48px;margin-bottom:12px;opacity:.35}
+.empty-title{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.empty-sub{font-size:13px;color:var(--ink3);line-height:1.6}
+</style>
+</head>
+<body>
+<div class="phone-shell">
+
+  <!-- STATUS BAR -->
+  <div class="status" style="position:relative">
+    <span class="status-time">9:41</span>
+    <div class="status-icons"><span>●●●</span><span>WiFi</span><span>97%</span></div>
+  </div>
+
+  <div class="screens">
+
+    <!-- ══ SCREEN 1: HOME ══ -->
+    <div id="s-home" class="screen active">
+      <div class="hero">
+        <div class="hero-top">
+          <div class="logo">SM<span>A</span>SH</div>
+          <div class="hero-av">MT<div class="notif-dot"></div></div>
+        </div>
+        <div class="hero-greet">Chào buổi sáng, Minh Tuấn 👋</div>
+        <div class="hero-title">Hôm nay đặt<br><em>sân nào?</em></div>
+        <div class="search-bar" onclick="goTo('s-search')">
+          <div class="search-icon-wrap"><i class="ti ti-search"></i></div>
+          <span class="search-text">Quận, địa chỉ, tên sân...</span>
+          <div class="filter-chip"><i class="ti ti-adjustments-horizontal" style="font-size:12px"></i>Lọc<div class="filter-badge-num">3</div></div>
+        </div>
+      </div>
+      <div class="pills">
+        <div class="pill active">Gần tôi</div>
+        <div class="pill">Tối nay</div>
+        <div class="pill">Sáng sớm</div>
+        <div class="pill">Máy lạnh ❄️</div>
+        <div class="pill">Dưới 80k</div>
+      </div>
+      <div class="scroll" style="padding-bottom:90px">
+        <div class="loyalty" onclick="goTo('s-profile')">
+          <div class="loyalty-ico">🏆</div>
+          <div class="loyalty-info">
+            <div class="loyalty-lbl">Điểm Smash của bạn</div>
+            <div class="loyalty-pts">2.340</div>
+            <div class="loyalty-bar-bg"><div class="loyalty-bar-fill"></div></div>
+            <div class="loyalty-hint">660 điểm nữa lên hạng PLATINUM</div>
+          </div>
+          <div class="loyalty-tier">GOLD</div>
+        </div>
+        <div class="sec-head">
+          <span class="sec-title">Sân gần bạn</span>
+          <span class="sec-link">Xem tất cả <i class="ti ti-chevron-right" style="font-size:14px"></i></span>
+        </div>
+        <div class="courts-scroll">
+          <!-- CARD 1 -->
+          <div class="court-card" onclick="goTo('s-detail')">
+            <div class="court-img">
+              <div class="court-img-bg" style="background:linear-gradient(135deg,#0B3D22,#1B7A47,#24A361)"></div>
+              <div class="court-img-lines"></div>
+              <div class="court-img-overlay"></div>
+              <div class="court-avail"><div class="avail-dot"></div>4 sân trống</div>
+              <div class="court-dist">1.2 km</div>
+              <div class="court-tags"><div class="court-tag ac">Máy lạnh</div><div class="court-tag">Trong nhà</div></div>
+            </div>
+            <div class="court-body">
+              <div class="court-name">CLB Phú Mỹ Hưng</div>
+              <div class="court-loc"><i class="ti ti-map-pin"></i>Quận 7, TPHCM</div>
+              <div class="slots-lbl">Giờ trống hôm nay</div>
+              <div class="slots-row">
+                <div class="slot taken">06:00</div>
+                <div class="slot free">07:00</div>
+                <div class="slot free">08:00</div>
+                <div class="slot taken">09:00</div>
+                <div class="slot peak">18:00</div>
+                <div class="slot free">19:00</div>
+              </div>
+              <div class="court-footer">
+                <div class="court-price">65.000đ <span>/ giờ</span></div>
+                <div class="court-rating"><span class="star">★</span>4.8</div>
+              </div>
+            </div>
+          </div>
+          <!-- CARD 2 -->
+          <div class="court-card" onclick="goTo('s-detail')">
+            <div class="court-img">
+              <div class="court-img-bg" style="background:linear-gradient(135deg,#0C2E3A,#1B5C7A,#2490B5)"></div>
+              <div class="court-img-lines"></div>
+              <div class="court-img-overlay"></div>
+              <div class="court-avail"><div class="avail-dot"></div>2 sân trống</div>
+              <div class="court-dist">2.8 km</div>
+              <div class="court-tags"><div class="court-tag">Ngoài trời</div><div class="court-tag">Mái che</div></div>
+            </div>
+            <div class="court-body">
+              <div class="court-name">Sân Tân Bình Sport</div>
+              <div class="court-loc"><i class="ti ti-map-pin"></i>Quận Tân Bình</div>
+              <div class="slots-lbl">Giờ trống hôm nay</div>
+              <div class="slots-row">
+                <div class="slot free">05:30</div>
+                <div class="slot free">06:30</div>
+                <div class="slot taken">07:30</div>
+                <div class="slot free">08:30</div>
+                <div class="slot peak">19:00</div>
+              </div>
+              <div class="court-footer">
+                <div class="court-price">55.000đ <span>/ giờ</span></div>
+                <div class="court-rating"><span class="star">★</span>4.6</div>
+              </div>
+            </div>
+          </div>
+          <!-- CARD 3 -->
+          <div class="court-card" onclick="goTo('s-detail')">
+            <div class="court-img">
+              <div class="court-img-bg" style="background:linear-gradient(135deg,#1A0B2E,#3D1A6B,#6B35B0)"></div>
+              <div class="court-img-lines"></div>
+              <div class="court-img-overlay"></div>
+              <div class="court-avail"><div class="avail-dot"></div>6 sân trống</div>
+              <div class="court-dist">3.5 km</div>
+              <div class="court-tags"><div class="court-tag ac">Máy lạnh</div><div class="court-tag">Cao cấp</div></div>
+            </div>
+            <div class="court-body">
+              <div class="court-name">Arena Badminton Hub</div>
+              <div class="court-loc"><i class="ti ti-map-pin"></i>Quận Bình Thạnh</div>
+              <div class="slots-lbl">Giờ trống hôm nay</div>
+              <div class="slots-row">
+                <div class="slot taken">06:00</div>
+                <div class="slot taken">07:00</div>
+                <div class="slot free">08:00</div>
+                <div class="slot free">09:00</div>
+                <div class="slot free">10:00</div>
+              </div>
+              <div class="court-footer">
+                <div class="court-price">90.000đ <span>/ giờ</span></div>
+                <div class="court-rating"><span class="star">★</span>4.9</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="peak-banner">
+          <div class="peak-ico">⚡</div>
+          <div class="peak-text">
+            <div class="peak-title">Giờ vàng tối nay còn sân!</div>
+            <div class="peak-sub">18:00–21:00 · 8 sân trong Quận 7</div>
+          </div>
+          <i class="ti ti-chevron-right peak-arrow"></i>
+        </div>
+        <div class="sec-head">
+          <span class="sec-title">Tất cả sân lân cận</span>
+          <span class="sec-link">Bản đồ <i class="ti ti-chevron-right" style="font-size:14px"></i></span>
+        </div>
+        <div class="courts-list">
+          <div class="court-row" onclick="goTo('s-detail')">
+            <div class="row-img"><div class="row-img-bg" style="background:linear-gradient(135deg,#0B3D22,#1B7A47)"></div><div class="row-img-lines"></div></div>
+            <div class="row-body">
+              <div class="row-name">CLB Phú Mỹ Hưng</div>
+              <div class="row-loc"><i class="ti ti-map-pin"></i>1.2 km · Quận 7</div>
+              <div class="row-slots">
+                <div class="slot free" style="font-size:9px;padding:3px 6px">07:00</div>
+                <div class="slot free" style="font-size:9px;padding:3px 6px">08:00</div>
+                <div class="slot peak" style="font-size:9px;padding:3px 6px">18:00</div>
+              </div>
+            </div>
+            <div class="row-right">
+              <div class="row-price">65k<span class="per">/giờ</span></div>
+              <div class="row-rating"><span class="star" style="font-size:10px">★</span>4.8</div>
+              <div class="row-avail">4 trống</div>
+            </div>
+          </div>
+          <div class="court-row" onclick="goTo('s-detail')">
+            <div class="row-img"><div class="row-img-bg" style="background:linear-gradient(135deg,#0C2E3A,#2490B5)"></div><div class="row-img-lines"></div></div>
+            <div class="row-body">
+              <div class="row-name">Sân Tân Bình Sport</div>
+              <div class="row-loc"><i class="ti ti-map-pin"></i>2.8 km · Tân Bình</div>
+              <div class="row-slots">
+                <div class="slot free" style="font-size:9px;padding:3px 6px">05:30</div>
+                <div class="slot free" style="font-size:9px;padding:3px 6px">06:30</div>
+                <div class="slot free" style="font-size:9px;padding:3px 6px">08:30</div>
+              </div>
+            </div>
+            <div class="row-right">
+              <div class="row-price">55k<span class="per">/giờ</span></div>
+              <div class="row-rating"><span class="star" style="font-size:10px">★</span>4.6</div>
+              <div class="row-avail">2 trống</div>
+            </div>
+          </div>
+          <div class="court-row" onclick="goTo('s-detail')">
+            <div class="row-img"><div class="row-img-bg" style="background:linear-gradient(135deg,#1A0B2E,#6B35B0)"></div><div class="row-img-lines"></div></div>
+            <div class="row-body">
+              <div class="row-name">Arena Badminton Hub</div>
+              <div class="row-loc"><i class="ti ti-map-pin"></i>3.5 km · Bình Thạnh</div>
+              <div class="row-slots">
+                <div class="slot free" style="font-size:9px;padding:3px 6px">08:00</div>
+                <div class="slot free" style="font-size:9px;padding:3px 6px">09:00</div>
+                <div class="slot free" style="font-size:9px;padding:3px 6px">10:00</div>
+              </div>
+            </div>
+            <div class="row-right">
+              <div class="row-price">90k<span class="per">/giờ</span></div>
+              <div class="row-rating"><span class="star" style="font-size:10px">★</span>4.9</div>
+              <div class="row-avail">6 trống</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-btn active"><div class="nav-icon"><i class="ti ti-home-2"></i></div><span class="nav-lbl">Trang chủ</span></div>
+        <div class="nav-btn" onclick="goTo('s-bookings')"><div class="nav-icon"><i class="ti ti-calendar-event"></i></div><span class="nav-lbl">Lịch đặt</span></div>
+        <div class="nav-center" onclick="goTo('s-search')"><i class="ti ti-search"></i></div>
+        <div class="nav-btn" onclick="goTo('s-profile')"><div class="nav-icon"><i class="ti ti-user-plus"></i></div><span class="nav-lbl">Tìm bạn</span></div>
+        <div class="nav-btn" onclick="goTo('s-profile')"><div class="nav-icon"><i class="ti ti-user-circle"></i></div><span class="nav-lbl">Tôi</span></div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN 2: COURT DETAIL ══ -->
+    <div id="s-detail" class="screen hidden-right">
+      <div class="scroll" style="padding-bottom:90px">
+        <div class="court-detail-img">
+          <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0B3D22,#1B7A47,#24A361)"></div>
+          <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.15) 1px,transparent 1px);background-size:52px 36px"></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(11,26,18,.5) 0%,transparent 50%)"></div>
+          <div class="detail-back" onclick="goBack()"><i class="ti ti-chevron-left"></i></div>
+          <div class="detail-share"><i class="ti ti-share"></i></div>
+          <div class="detail-avail-badge"><div class="avail-dot"></div>4 sân đang trống</div>
+        </div>
+        <div class="detail-body">
+          <div class="detail-name">CLB Phú Mỹ Hưng</div>
+          <div class="detail-meta">
+            <div class="detail-rating"><span class="star">★</span>4.8 <span style="font-size:11px;color:var(--ink3);font-weight:400">(147 đánh giá)</span></div>
+            <div class="detail-meta-item"><i class="ti ti-map-pin"></i>1.2 km · Quận 7</div>
+          </div>
+          <div class="amenity-row">
+            <div class="amenity"><i class="ti ti-wind"></i>Máy lạnh</div>
+            <div class="amenity"><i class="ti ti-building"></i>Trong nhà</div>
+            <div class="amenity"><i class="ti ti-car"></i>Bãi xe</div>
+            <div class="amenity"><i class="ti ti-shirt"></i>Phòng thay đồ</div>
+          </div>
+          <div class="section-title-sm">Chọn ngày</div>
+          <div class="date-row">
+            <div class="date-chip"><div class="day">24</div><div class="wd">T5</div></div>
+            <div class="date-chip active"><div class="day">25</div><div class="wd">T6</div></div>
+            <div class="date-chip"><div class="day">26</div><div class="wd">T7</div></div>
+            <div class="date-chip"><div class="day">27</div><div class="wd">CN</div></div>
+            <div class="date-chip"><div class="day">28</div><div class="wd">T2</div></div>
+          </div>
+          <div class="section-title-sm">Chọn giờ — Sân A1</div>
+          <div class="slot-grid">
+            <div class="slot-chip taken">06:00</div>
+            <div class="slot-chip free" onclick="selectSlot(this)">07:00</div>
+            <div class="slot-chip free" onclick="selectSlot(this)">08:00</div>
+            <div class="slot-chip taken">09:00</div>
+            <div class="slot-chip free" onclick="selectSlot(this)">10:00</div>
+            <div class="slot-chip free" onclick="selectSlot(this)">11:00</div>
+            <div class="slot-chip taken">17:00</div>
+            <div class="slot-chip peak" onclick="selectSlot(this)">18:00 ⚡</div>
+            <div class="slot-chip peak" onclick="selectSlot(this)">19:00 ⚡</div>
+          </div>
+          <div class="section-title-sm">Thêm dịch vụ</div>
+          <div class="addons">
+            <div class="addon" onclick="toggleAddon(this)">
+              <div class="addon-name">🏸 Vợt thuê</div>
+              <div class="addon-price">+20.000đ/cây</div>
+            </div>
+            <div class="addon" onclick="toggleAddon(this)">
+              <div class="addon-name">🏓 Cầu lông</div>
+              <div class="addon-price">+15.000đ/hộp</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sticky-footer">
+        <div class="price-row">
+          <span class="price-lbl">Tổng cộng</span>
+          <span class="price-val" id="detail-price">65.000đ</span>
+        </div>
+        <button class="btn-book" onclick="goTo('s-confirm')">Đặt sân ngay · MoMo / ZaloPay</button>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN 3: BOOKING CONFIRM ══ -->
+    <div id="s-confirm" class="screen hidden-right confirm-screen">
+      <div class="top-nav">
+        <button class="back-btn" onclick="goBack()"><i class="ti ti-chevron-left"></i>Quay lại</button>
+        <span class="top-nav-title">Xác nhận đặt sân</span>
+      </div>
+      <div class="scroll">
+        <div style="padding:16px">
+          <div class="confirm-card">
+            <div class="confirm-card-title">Chi tiết đặt sân</div>
+            <div class="confirm-row"><span class="confirm-lbl"><i class="ti ti-building"></i>Sân</span><span class="confirm-val">CLB Phú Mỹ Hưng · A1</span></div>
+            <div class="confirm-row"><span class="confirm-lbl"><i class="ti ti-calendar"></i>Ngày</span><span class="confirm-val">Thứ 6, 25/05/2025</span></div>
+            <div class="confirm-row"><span class="confirm-lbl"><i class="ti ti-clock"></i>Giờ</span><span class="confirm-val" style="font-family:var(--mono)">08:00 – 09:00</span></div>
+            <div class="confirm-row"><span class="confirm-lbl"><i class="ti ti-map-pin"></i>Địa chỉ</span><span class="confirm-val">12 Nguyễn Lương Bằng, Q.7</span></div>
+            <div class="confirm-row"><span class="confirm-lbl"><i class="ti ti-receipt"></i>Tiền sân</span><span class="confirm-val" style="font-family:var(--mono)">65.000đ</span></div>
+            <div class="confirm-row"><span class="confirm-lbl"><i class="ti ti-plus"></i>Vợt thuê</span><span class="confirm-val" style="font-family:var(--mono)">20.000đ</span></div>
+            <div class="confirm-row" style="border-bottom:none;padding-top:12px;margin-top:4px;border-top:1px solid var(--border)">
+              <span class="confirm-lbl" style="font-weight:700;color:var(--ink);font-size:14px">Tổng cộng</span>
+              <span class="confirm-total">85.000đ</span>
+            </div>
+          </div>
+          <div class="confirm-card">
+            <div class="confirm-card-title">Chọn phương thức thanh toán</div>
+            <div class="pay-methods">
+              <div class="pay-method active" onclick="selectPay(this)">
+                <div class="pay-method-logo" style="background:#e8f5ee">💚</div>
+                <span class="pay-method-name">MoMo</span>
+                <div class="pay-radio"><div class="pay-radio-dot"></div></div>
+              </div>
+              <div class="pay-method" onclick="selectPay(this)">
+                <div class="pay-method-logo" style="background:#e8f0fb">💙</div>
+                <span class="pay-method-name">ZaloPay</span>
+                <div class="pay-radio"><div class="pay-radio-dot"></div></div>
+              </div>
+              <div class="pay-method" onclick="selectPay(this)">
+                <div class="pay-method-logo" style="background:#f4f8f5">🏦</div>
+                <span class="pay-method-name">Chuyển khoản ngân hàng</span>
+                <div class="pay-radio"><div class="pay-radio-dot"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:12px 16px 28px;background:var(--white);border-top:1px solid var(--border2);flex-shrink:0">
+        <button class="btn-book" onclick="showLoader()">Thanh toán 85.000đ</button>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN 4: SUCCESS ══ -->
+    <div id="s-success" class="screen slide-up success-screen">
+      <div class="scroll">
+        <div class="success-hero">
+          <div class="success-icon">✅</div>
+          <div class="success-title">Đặt sân thành công!</div>
+          <div class="success-sub">Xác nhận đã gửi qua Zalo của bạn</div>
+        </div>
+        <div class="success-body">
+          <div class="booking-code-card">
+            <div class="booking-code-lbl">Mã đặt sân</div>
+            <div class="booking-code">SMH-7F2K</div>
+          </div>
+          <div class="confirm-card" style="margin-bottom:12px">
+            <div class="confirm-row"><span class="confirm-lbl"><i class="ti ti-building"></i>Sân</span><span class="confirm-val">CLB Phú Mỹ Hưng · A1</span></div>
+            <div class="confirm-row"><span class="confirm-lbl"><i class="ti ti-calendar"></i>Ngày giờ</span><span class="confirm-val">T6, 25/05 · 08:00–09:00</span></div>
+            <div class="confirm-row"><span class="confirm-lbl"><i class="ti ti-cash"></i>Đã thanh toán</span><span class="confirm-val" style="color:var(--green);font-weight:700">85.000đ · MoMo</span></div>
+          </div>
+          <div class="points-toast">
+            <div class="points-icon">🏆</div>
+            <div class="points-info">
+              <div class="points-earned">+85 Smash Points</div>
+              <div class="points-lbl">Bạn đang ở mức GOLD · còn 575 điểm → PLATINUM</div>
+            </div>
+          </div>
+          <button class="btn-secondary" onclick="goTo('s-detail')">Thêm vào lịch</button>
+          <button class="btn-home" onclick="goHome()">Về trang chủ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN 5: PROFILE ══ -->
+    <div id="s-profile" class="screen hidden-right">
+      <div style="background:linear-gradient(160deg,var(--ink) 55%,#0F5233);padding:48px 20px 20px;text-align:center;flex-shrink:0">
+        <div style="width:64px;height:64px;border-radius:50%;background:var(--green);border:3px solid rgba(255,255,255,.25);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#fff">MT</div>
+        <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;letter-spacing:-.3px">Nguyễn Minh Tuấn</div>
+        <div style="display:inline-flex;align-items:center;gap:5px;background:var(--gold);color:var(--ink);font-size:11px;font-weight:800;padding:4px 12px;border-radius:20px">🏆 GOLD · Quận 7</div>
+      </div>
+      <div style="display:flex;justify-content:space-around;padding:14px;background:var(--white);border-bottom:1px solid var(--border);flex-shrink:0">
+        <div style="text-align:center"><div style="font-size:20px;font-weight:700;font-family:var(--mono);color:var(--ink)">47</div><div style="font-size:10px;color:var(--ink3);margin-top:2px">Buổi chơi</div></div>
+        <div style="text-align:center;border-left:1px solid var(--border);border-right:1px solid var(--border);padding:0 20px"><div style="font-size:20px;font-weight:700;font-family:var(--mono);color:var(--ink)">12</div><div style="font-size:10px;color:var(--ink3);margin-top:2px">Sân khác nhau</div></div>
+        <div style="text-align:center"><div style="font-size:20px;font-weight:700;font-family:var(--mono);color:var(--ink)">4.9</div><div style="font-size:10px;color:var(--ink3);margin-top:2px">Đánh giá</div></div>
+      </div>
+      <div class="scroll" style="padding-bottom:30px">
+        <div style="background:var(--ink);border-radius:14px;margin:14px 16px;padding:14px 16px;overflow:hidden;position:relative">
+          <div style="position:absolute;right:-15px;top:-15px;width:90px;height:90px;background:radial-gradient(circle,rgba(27,122,71,.35),transparent)"></div>
+          <div style="font-size:10px;color:rgba(255,255,255,.5);margin-bottom:3px">Điểm Smash</div>
+          <div style="font-size:26px;font-weight:700;color:#fff;font-family:var(--mono);margin-bottom:7px">2.340</div>
+          <div style="background:rgba(255,255,255,.15);border-radius:20px;height:5px;margin-bottom:6px"><div style="width:62%;height:5px;border-radius:20px;background:linear-gradient(90deg,var(--green2),#68D9A0)"></div></div>
+          <div style="font-size:10px;color:rgba(255,255,255,.4)">Còn 660 điểm → PLATINUM · 1 điểm = 1.000đ</div>
+          <div style="position:absolute;top:14px;right:14px;background:linear-gradient(135deg,#C9A84C,#E8C96A);color:var(--ink);font-size:10px;font-weight:800;padding:3px 9px;border-radius:20px">GOLD</div>
+        </div>
+        <div style="padding:0 16px">
+          <div style="font-size:12px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Lịch sử gần đây</div>
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:14px;padding:4px 14px">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border2)">
+              <div><div style="font-size:13px;font-weight:500;color:var(--ink)">CLB Phú Mỹ Hưng</div><div style="font-size:11px;color:var(--ink3)">Hôm qua · 07:00</div></div>
+              <div style="text-align:right"><div style="font-size:12px;font-weight:700;color:var(--green)">+65 pts</div><div style="font-size:11px;color:var(--ink3)">65.000đ</div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border2)">
+              <div><div style="font-size:13px;font-weight:500;color:var(--ink)">Sân Tân Bình Sport</div><div style="font-size:11px;color:var(--ink3)">23/05 · 19:00</div></div>
+              <div style="text-align:right"><div style="font-size:12px;font-weight:700;color:var(--green)">+70 pts</div><div style="font-size:11px;color:var(--ink3)">70.000đ</div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0">
+              <div><div style="font-size:13px;font-weight:500;color:var(--ink)">Arena Badminton Hub</div><div style="font-size:11px;color:var(--ink3)">20/05 · 08:00</div></div>
+              <div style="text-align:right"><div style="font-size:12px;font-weight:700;color:var(--green)">+90 pts</div><div style="font-size:11px;color:var(--ink3)">90.000đ</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-btn" onclick="goHome()"><div class="nav-icon"><i class="ti ti-home-2"></i></div><span class="nav-lbl">Trang chủ</span></div>
+        <div class="nav-btn" onclick="goTo('s-bookings')"><div class="nav-icon"><i class="ti ti-calendar-event"></i></div><span class="nav-lbl">Lịch đặt</span></div>
+        <div class="nav-center" onclick="goTo('s-search')"><i class="ti ti-search"></i></div>
+        <div class="nav-btn"><div class="nav-icon"><i class="ti ti-user-plus"></i></div><span class="nav-lbl">Tìm bạn</span></div>
+        <div class="nav-btn active"><div class="nav-icon"><i class="ti ti-user-circle"></i></div><span class="nav-lbl">Tôi</span></div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN 6: SEARCH ══ -->
+    <div id="s-search" class="screen slide-up">
+      <div style="background:var(--ink);padding:14px 16px;flex-shrink:0">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+          <button class="back-btn" style="color:rgba(255,255,255,.7)" onclick="goBack()"><i class="ti ti-x" style="font-size:20px"></i></button>
+          <div style="flex:1;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:12px;display:flex;align-items:center;padding:10px 12px;gap:8px">
+            <i class="ti ti-search" style="font-size:15px;color:rgba(255,255,255,.5)"></i>
+            <span style="font-size:13px;color:rgba(255,255,255,.45)">Tên sân, quận, địa chỉ...</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px">
+          <div class="pill active">Gần tôi</div>
+          <div class="pill">Máy lạnh</div>
+          <div class="pill">Dưới 70k</div>
+          <div class="pill">Tối nay</div>
+          <div class="pill">Quận 7</div>
+        </div>
+      </div>
+      <div class="scroll" style="padding:14px 16px 30px;background:var(--surface)">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin-bottom:10px">3 sân phù hợp</div>
+        <div class="court-row" onclick="goTo('s-detail')" style="margin-bottom:9px">
+          <div class="row-img"><div class="row-img-bg" style="background:linear-gradient(135deg,#0B3D22,#1B7A47)"></div><div class="row-img-lines"></div></div>
+          <div class="row-body"><div class="row-name">CLB Phú Mỹ Hưng</div><div class="row-loc"><i class="ti ti-map-pin"></i>1.2 km · Quận 7</div><div class="row-slots"><div class="slot free" style="font-size:9px;padding:3px 6px">07:00</div><div class="slot free" style="font-size:9px;padding:3px 6px">08:00</div></div></div>
+          <div class="row-right"><div class="row-price">65k<span class="per">/giờ</span></div><div class="row-avail">4 trống</div></div>
+        </div>
+        <div class="court-row" onclick="goTo('s-detail')" style="margin-bottom:9px">
+          <div class="row-img"><div class="row-img-bg" style="background:linear-gradient(135deg,#0C2E3A,#2490B5)"></div><div class="row-img-lines"></div></div>
+          <div class="row-body"><div class="row-name">Sân Tân Bình Sport</div><div class="row-loc"><i class="ti ti-map-pin"></i>2.8 km · Tân Bình</div><div class="row-slots"><div class="slot free" style="font-size:9px;padding:3px 6px">05:30</div><div class="slot free" style="font-size:9px;padding:3px 6px">08:30</div></div></div>
+          <div class="row-right"><div class="row-price">55k<span class="per">/giờ</span></div><div class="row-avail">2 trống</div></div>
+        </div>
+        <div class="court-row" onclick="goTo('s-detail')">
+          <div class="row-img"><div class="row-img-bg" style="background:linear-gradient(135deg,#1A0B2E,#6B35B0)"></div><div class="row-img-lines"></div></div>
+          <div class="row-body"><div class="row-name">Arena Badminton Hub</div><div class="row-loc"><i class="ti ti-map-pin"></i>3.5 km · Bình Thạnh</div><div class="row-slots"><div class="slot free" style="font-size:9px;padding:3px 6px">08:00</div><div class="slot free" style="font-size:9px;padding:3px 6px">09:00</div></div></div>
+          <div class="row-right"><div class="row-price">90k<span class="per">/giờ</span></div><div class="row-avail">6 trống</div></div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ SCREEN: BOOKING LIST ══ -->
+    <div id="s-bookings" class="screen hidden-right">
+      <div class="bk-header">
+        <div class="bk-header-top">
+          <div>
+            <div class="bk-header-title">Lịch đặt sân</div>
+            <div class="bk-header-sub">Tháng 5, 2025</div>
+          </div>
+          <div style="width:34px;height:34px;background:rgba(255,255,255,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer"><i class="ti ti-bell" style="color:rgba(255,255,255,.7);font-size:17px"></i></div>
+        </div>
+        <div class="bk-tabs">
+          <div class="bk-tab on" id="bkt-upcoming" onclick="switchBkTab('upcoming')">Sắp tới</div>
+          <div class="bk-tab" id="bkt-completed" onclick="switchBkTab('completed')">Đã chơi</div>
+          <div class="bk-tab" id="bkt-cancelled" onclick="switchBkTab('cancelled')">Đã huỷ</div>
+        </div>
+      </div>
+
+      <div class="scroll" style="padding-bottom:80px">
+        <!-- STATS -->
+        <div class="bk-stats">
+          <div class="bk-stat">
+            <div class="bk-stat-val">47</div>
+            <div class="bk-stat-lbl">Tổng buổi</div>
+          </div>
+          <div class="bk-stat">
+            <div class="bk-stat-val green">2.340</div>
+            <div class="bk-stat-lbl">Smash Points</div>
+          </div>
+          <div class="bk-stat">
+            <div class="bk-stat-val">3.1M</div>
+            <div class="bk-stat-lbl">Đã chi tiêu</div>
+          </div>
+        </div>
+
+        <!-- UPCOMING TAB -->
+        <div id="bk-upcoming">
+          <div class="bk-section-lbl">Sắp tới</div>
+
+          <!-- Card 1: Confirmed upcoming -->
+          <div class="bk-card" data-bk="confirmed">
+            <div class="bk-card-top">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between">
+                <div class="bk-card-court">CLB Phú Mỹ Hưng</div>
+                <span class="bk-status bks-confirmed">Đã xác nhận</span>
+              </div>
+              <div class="bk-card-meta">
+                <div class="bk-card-meta-item"><i class="ti ti-calendar"></i>Thứ 6, 25/05/2025</div>
+                <div class="bk-card-meta-item"><i class="ti ti-clock"></i>08:00–09:00</div>
+                <div class="bk-card-meta-item"><i class="ti ti-layout-grid"></i>Sân A1</div>
+              </div>
+            </div>
+            <div class="bk-card-body">
+              <div>
+                <div class="bk-card-price">85.000đ</div>
+                <div class="bk-card-pay">MoMo · Đã thanh toán</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+                <div class="bk-card-code">SMH-7F2K</div>
+                <div class="bk-points-pill"><i class="ti ti-star"></i>+85 pts</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Pending payment -->
+          <div class="bk-card" data-bk="pending">
+            <div class="bk-card-top">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between">
+                <div class="bk-card-court">Arena Badminton Hub</div>
+                <span class="bk-status bks-pending">Chờ thanh toán</span>
+              </div>
+              <div class="bk-card-meta">
+                <div class="bk-card-meta-item"><i class="ti ti-calendar"></i>Thứ 7, 26/05/2025</div>
+                <div class="bk-card-meta-item"><i class="ti ti-clock"></i>07:00–08:00</div>
+                <div class="bk-card-meta-item"><i class="ti ti-layout-grid"></i>Sân B2</div>
+              </div>
+            </div>
+            <div class="bk-card-body">
+              <div>
+                <div class="bk-card-price">90.000đ</div>
+                <div class="bk-card-pay">Chưa thanh toán · Hết hạn 15 phút</div>
+              </div>
+              <button style="background:var(--green);color:#fff;border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;font-family:var(--font);cursor:pointer" onclick="event.stopPropagation();goTo('s-confirm')">Thanh toán</button>
+            </div>
+          </div>
+
+          <div class="bk-section-lbl" style="padding-top:8px">Tuần tới</div>
+
+          <!-- Card 3: Next week -->
+          <div class="bk-card" data-bk="confirmed2">
+            <div class="bk-card-top">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between">
+                <div class="bk-card-court">Sân Tân Bình Sport</div>
+                <span class="bk-status bks-confirmed">Đã xác nhận</span>
+              </div>
+              <div class="bk-card-meta">
+                <div class="bk-card-meta-item"><i class="ti ti-calendar"></i>Thứ 3, 28/05/2025</div>
+                <div class="bk-card-meta-item"><i class="ti ti-clock"></i>06:30–07:30</div>
+                <div class="bk-card-meta-item"><i class="ti ti-layout-grid"></i>Sân chính</div>
+              </div>
+            </div>
+            <div class="bk-card-body">
+              <div>
+                <div class="bk-card-price">55.000đ</div>
+                <div class="bk-card-pay">ZaloPay · Đã thanh toán</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+                <div class="bk-card-code">SMH-3A9X</div>
+                <div class="bk-points-pill"><i class="ti ti-star"></i>+55 pts</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMPLETED TAB (hidden by default) -->
+        <div id="bk-completed" style="display:none">
+          <div class="bk-section-lbl">Tháng 5</div>
+
+          <div class="bk-card" data-bk="done1">
+            <div class="bk-card-top">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between">
+                <div class="bk-card-court">CLB Phú Mỹ Hưng</div>
+                <span class="bk-status bks-completed">Đã chơi</span>
+              </div>
+              <div class="bk-card-meta">
+                <div class="bk-card-meta-item"><i class="ti ti-calendar"></i>Thứ 4, 22/05/2025</div>
+                <div class="bk-card-meta-item"><i class="ti ti-clock"></i>07:00–08:00</div>
+                <div class="bk-card-meta-item"><i class="ti ti-star" style="color:var(--gold)"></i>Đã đánh giá 5★</div>
+              </div>
+            </div>
+            <div class="bk-card-body">
+              <div>
+                <div class="bk-card-price">65.000đ</div>
+                <div class="bk-card-pay">MoMo · Đã thanh toán</div>
+              </div>
+              <div class="bk-points-pill"><i class="ti ti-star"></i>+65 pts earned</div>
+            </div>
+          </div>
+
+          <div class="bk-card" data-bk="done2">
+            <div class="bk-card-top">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between">
+                <div class="bk-card-court">Arena Badminton Hub</div>
+                <span class="bk-status bks-completed">Đã chơi</span>
+              </div>
+              <div class="bk-card-meta">
+                <div class="bk-card-meta-item"><i class="ti ti-calendar"></i>Thứ 7, 20/05/2025</div>
+                <div class="bk-card-meta-item"><i class="ti ti-clock"></i>08:00–09:00</div>
+                <div class="bk-card-meta-item"><i class="ti ti-message-circle" style="color:var(--ink3)"></i>Chưa đánh giá</div>
+              </div>
+            </div>
+            <div class="bk-card-body">
+              <div>
+                <div class="bk-card-price">90.000đ</div>
+                <div class="bk-card-pay">ZaloPay · Đã thanh toán</div>
+              </div>
+              <button style="background:var(--surface);color:var(--ink);border:1px solid var(--border);border-radius:10px;padding:7px 12px;font-size:11px;font-weight:600;font-family:var(--font);cursor:pointer">Đánh giá ★</button>
+            </div>
+          </div>
+
+          <div class="bk-card" data-bk="done3">
+            <div class="bk-card-top">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between">
+                <div class="bk-card-court">Sân Tân Bình Sport</div>
+                <span class="bk-status bks-completed">Đã chơi</span>
+              </div>
+              <div class="bk-card-meta">
+                <div class="bk-card-meta-item"><i class="ti ti-calendar"></i>Thứ 3, 19/05/2025</div>
+                <div class="bk-card-meta-item"><i class="ti ti-clock"></i>19:00–20:00</div>
+                <div class="bk-card-meta-item"><i class="ti ti-star" style="color:var(--gold)"></i>Đã đánh giá 4★</div>
+              </div>
+            </div>
+            <div class="bk-card-body">
+              <div>
+                <div class="bk-card-price">55.000đ</div>
+                <div class="bk-card-pay">Tiền mặt</div>
+              </div>
+              <div class="bk-points-pill"><i class="ti ti-star"></i>+55 pts earned</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CANCELLED TAB -->
+        <div id="bk-cancelled" style="display:none">
+          <div class="empty-state">
+            <div class="empty-icon">🎉</div>
+            <div class="empty-title">Không có lịch đã huỷ</div>
+            <div class="empty-sub">Tốt lắm! Bạn chưa huỷ buổi chơi nào. Hãy tiếp tục duy trì nhé.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOOKING DETAIL OVERLAY -->
+      <div class="bk-detail-overlay" id="bk-detail">
+        <div class="bk-detail-hero">
+          <div class="bk-status-icon" id="bk-detail-icon" style="background:var(--green3)">✅</div>
+          <div class="bk-detail-court" id="bk-detail-court">CLB Phú Mỹ Hưng</div>
+          <div class="bk-detail-time" id="bk-detail-time">Thứ 6, 25/05 · 08:00–09:00 · Sân A1</div>
+        </div>
+        <div class="bk-detail-body">
+
+          <div style="margin-bottom:14px">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);margin-bottom:10px">Chi tiết booking</div>
+            <div class="bk-detail-row"><span class="bk-detail-lbl"><i class="ti ti-map-pin"></i>Địa chỉ</span><span class="bk-detail-val" id="bk-detail-addr">12 Nguyễn Lương Bằng, Q.7</span></div>
+            <div class="bk-detail-row"><span class="bk-detail-lbl"><i class="ti ti-phone"></i>Liên hệ sân</span><span class="bk-detail-val">028 3456 7890</span></div>
+            <div class="bk-detail-row"><span class="bk-detail-lbl"><i class="ti ti-receipt"></i>Mã đặt sân</span><span class="bk-detail-val" id="bk-detail-code" style="font-family:var(--mono);font-weight:700;color:var(--green)">SMH-7F2K</span></div>
+            <div class="bk-detail-row"><span class="bk-detail-lbl"><i class="ti ti-cash"></i>Thanh toán</span><span class="bk-detail-val" id="bk-detail-pay">85.000đ · MoMo</span></div>
+            <div class="bk-detail-row" id="bk-pts-row"><span class="bk-detail-lbl"><i class="ti ti-star" style="color:var(--gold)"></i>Smash Points</span><span class="bk-detail-val" style="color:var(--green);font-weight:700" id="bk-detail-pts">+85 điểm đã nhận</span></div>
+          </div>
+
+          <div>
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);margin-bottom:10px">Lịch sử</div>
+            <div class="bk-timeline" id="bk-timeline">
+              <div class="bk-tl-item">
+                <div class="bk-tl-dot" style="background:var(--green)"></div>
+                <div><div class="bk-tl-main">Đặt sân thành công</div><div class="bk-tl-time">25/05/2025 · 07:32</div></div>
+              </div>
+              <div class="bk-tl-item">
+                <div class="bk-tl-dot" style="background:var(--green)"></div>
+                <div><div class="bk-tl-main">Thanh toán xác nhận · MoMo</div><div class="bk-tl-time">25/05/2025 · 07:33</div></div>
+              </div>
+              <div class="bk-tl-item">
+                <div class="bk-tl-dot" style="background:var(--green2)"></div>
+                <div><div class="bk-tl-main">Zalo xác nhận đã gửi</div><div class="bk-tl-time">25/05/2025 · 07:33</div></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="bk-detail-actions" id="bk-detail-actions">
+          <button class="bk-action-btn" onclick="closeBkDetail()"><i class="ti ti-arrow-left"></i>Quay lại</button>
+          <button class="bk-action-btn" style="flex:1.2"><i class="ti ti-map-pin"></i>Chỉ đường</button>
+          <button class="bk-action-btn danger"><i class="ti ti-calendar-x"></i>Huỷ</button>
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-btn" onclick="goHome()"><div class="nav-icon"><i class="ti ti-home-2"></i></div><span class="nav-lbl">Trang chủ</span></div>
+        <div class="nav-btn active"><div class="nav-icon"><i class="ti ti-calendar-event"></i></div><span class="nav-lbl">Lịch đặt</span></div>
+        <div class="nav-center" onclick="goTo('s-search')"><i class="ti ti-search"></i></div>
+        <div class="nav-btn" onclick="goTo('s-profile')"><div class="nav-icon"><i class="ti ti-user-plus"></i></div><span class="nav-lbl">Tìm bạn</span></div>
+        <div class="nav-btn" onclick="goTo('s-profile')"><div class="nav-icon"><i class="ti ti-user-circle"></i></div><span class="nav-lbl">Tôi</span></div>
+      </div>
+    </div>
+    <!-- LOADER OVERLAY -->
+    <div class="loader-overlay" id="loader" style="display:none">
+      <div style="text-align:center">
+        <div class="loader"></div>
+        <div style="font-size:13px;color:var(--ink3);margin-top:14px;font-weight:500">Đang xử lý thanh toán...</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+var navStack = ['s-home'];
+
+function goTo(id) {
+  var current = document.querySelector('.screen.active');
+  var next = document.getElementById(id);
+  if (!current || !next || current === next) return;
+
+  var isSlideUp = next.classList.contains('slide-up') || id === 's-search' || id === 's-success';
+
+  current.classList.remove('active');
+  if (isSlideUp) {
+    current.classList.add('hidden-right');
+  } else {
+    current.classList.add('hidden-left');
+  }
+
+  next.classList.remove('hidden-right', 'hidden-left');
+  next.classList.add('active');
+  navStack.push(id);
+
+  // scroll to top
+  var scroll = next.querySelector('.scroll');
+  if (scroll) scroll.scrollTop = 0;
+}
+
+function goBack() {
+  if (navStack.length <= 1) return;
+  var current = document.querySelector('.screen.active');
+  navStack.pop();
+  var prevId = navStack[navStack.length - 1];
+  var prev = document.getElementById(prevId);
+  if (!prev) return;
+
+  current.classList.remove('active');
+  current.classList.add('hidden-right');
+
+  prev.classList.remove('hidden-left', 'hidden-right');
+  prev.classList.add('active');
+}
+
+function goHome() {
+  document.querySelectorAll('.screen').forEach(function(s) {
+    s.classList.remove('active', 'hidden-left');
+    s.classList.add(s.id === 's-home' ? 'active' : 'hidden-right');
+    if (s.classList.contains('slide-up') && s.id !== 's-home') {
+      s.classList.remove('active');
+    }
+  });
+  navStack = ['s-home'];
+}
+
+function selectSlot(el) {
+  document.querySelectorAll('.slot-chip').forEach(function(s) {
+    if (!s.classList.contains('taken')) {
+      s.classList.remove('selected');
+      if (!s.classList.contains('peak')) s.classList.add('free');
+    }
+  });
+  el.classList.remove('free', 'peak');
+  el.classList.add('selected');
+
+  // Update price based on selection
+  var isPeak = el.textContent.includes('⚡');
+  var price = isPeak ? 90000 : 65000;
+  var priceEl = document.getElementById('detail-price');
+  if (priceEl) priceEl.textContent = price.toLocaleString('vi-VN') + 'đ';
+}
+
+function toggleAddon(el) {
+  el.classList.toggle('sel');
+  // recalc price
+  var base = document.querySelector('.slot-chip.selected')
+    ? (document.querySelector('.slot-chip.selected').textContent.includes('⚡') ? 90000 : 65000)
+    : 65000;
+  var addons = document.querySelectorAll('.addon.sel').length;
+  var extra = addons * 17500;
+  var priceEl = document.getElementById('detail-price');
+  if (priceEl) priceEl.textContent = (base + extra).toLocaleString('vi-VN') + 'đ';
+}
+
+function selectPay(el) {
+  document.querySelectorAll('.pay-method').forEach(function(p) { p.classList.remove('active'); });
+  el.classList.add('active');
+}
+
+function showLoader() {
+  var loader = document.getElementById('loader');
+  loader.style.display = 'flex';
+  setTimeout(function() {
+    loader.style.display = 'none';
+    goTo('s-success');
+  }, 1800);
+}
+/* ── BOOKING LIST ───────────────────────────────────── */
+// Event delegation — handles bk-card clicks reliably
+document.addEventListener('click', function(e) {
+  var card = e.target.closest('[data-bk]');
+  if (card) {
+    var key = card.getAttribute('data-bk');
+    if (key) openBkDetail(key);
+  }
+});
+
+function switchBkTab(tab) {
+  ['upcoming','completed','cancelled'].forEach(function(t) {
+    document.getElementById('bkt-'+t).classList.toggle('on', t===tab);
+    document.getElementById('bk-'+t).style.display = t===tab ? 'block' : 'none';
+  });
+}
+
+var BK_DATA = {
+  confirmed:  {court:'CLB Phú Mỹ Hưng',  time:'Thứ 6, 25/05 · 08:00–09:00 · Sân A1', addr:'12 Nguyễn Lương Bằng, Q.7', code:'SMH-7F2K', pay:'85.000đ · MoMo', pts:'+85 điểm đã nhận', icon:'✅', iconBg:'#e3f5ec', status:'confirmed'},
+  pending:    {court:'Arena Badminton Hub',time:'Thứ 7, 26/05 · 07:00–08:00 · Sân B2', addr:'45 Đinh Bộ Lĩnh, Bình Thạnh', code:'SMH-9B1P', pay:'90.000đ · Chưa thanh toán', pts:'Chờ thanh toán để nhận điểm', icon:'⏳', iconBg:'#fdf3e3', status:'pending'},
+  confirmed2: {court:'Sân Tân Bình Sport', time:'Thứ 3, 28/05 · 06:30–07:30 · Sân chính', addr:'78 Hoàng Văn Thụ, Tân Bình', code:'SMH-3A9X', pay:'55.000đ · ZaloPay', pts:'+55 điểm đã nhận', icon:'✅', iconBg:'#e3f5ec', status:'confirmed'},
+  done1:      {court:'CLB Phú Mỹ Hưng',   time:'Thứ 4, 22/05 · 07:00–08:00 · Sân A2', addr:'12 Nguyễn Lương Bằng, Q.7', code:'SMH-4C7W', pay:'65.000đ · MoMo', pts:'+65 điểm đã nhận', icon:'🏸', iconBg:'#e3f5ec', status:'done'},
+  done2:      {court:'Arena Badminton Hub', time:'Thứ 7, 20/05 · 08:00–09:00 · Sân A1', addr:'45 Đinh Bộ Lĩnh, Bình Thạnh', code:'SMH-2D8V', pay:'90.000đ · ZaloPay', pts:'Chưa đánh giá', icon:'🏸', iconBg:'#e3f5ec', status:'done'},
+  done3:      {court:'Sân Tân Bình Sport',  time:'Thứ 3, 19/05 · 19:00–20:00 · Sân chính', addr:'78 Hoàng Văn Thụ, Tân Bình', code:'SMH-1E5U', pay:'55.000đ · Tiền mặt', pts:'+55 điểm đã nhận', icon:'🏸', iconBg:'#e3f5ec', status:'done'},
+};
+
+function openBkDetail(key) {
+  var d = BK_DATA[key];
+  if (!d) return;
+  document.getElementById('bk-detail-icon').textContent = d.icon;
+  document.getElementById('bk-detail-icon').style.background = d.iconBg;
+  document.getElementById('bk-detail-court').textContent = d.court;
+  document.getElementById('bk-detail-time').textContent = d.time;
+  document.getElementById('bk-detail-addr').textContent = d.addr;
+  document.getElementById('bk-detail-code').textContent = d.code;
+  document.getElementById('bk-detail-pay').textContent = d.pay;
+  document.getElementById('bk-detail-pts').textContent = d.pts;
+
+  var actions = document.getElementById('bk-detail-actions');
+  if (d.status === 'done') {
+    actions.innerHTML = '<button class="bk-action-btn" onclick="closeBkDetail()"><i class="ti ti-arrow-left"></i>Quay lại</button><button class="bk-action-btn primary" style="flex:1.5"><i class="ti ti-star"></i>Đánh giá sân</button><button class="bk-action-btn"><i class="ti ti-repeat"></i>Đặt lại</button>';
+  } else if (d.status === 'pending') {
+    actions.innerHTML = '<button class="bk-action-btn" onclick="closeBkDetail()"><i class="ti ti-arrow-left"></i>Quay lại</button><button class="bk-action-btn primary" style="flex:2" onclick="goTo(\'s-confirm\')"><i class="ti ti-credit-card"></i>Thanh toán ngay</button>';
+  } else {
+    actions.innerHTML = '<button class="bk-action-btn" onclick="closeBkDetail()"><i class="ti ti-arrow-left"></i>Quay lại</button><button class="bk-action-btn" style="flex:1.2"><i class="ti ti-map-pin"></i>Chỉ đường</button><button class="bk-action-btn danger"><i class="ti ti-calendar-x"></i>Huỷ</button>';
+  }
+
+  document.getElementById('bk-detail').classList.add('show');
+}
+
+function closeBkDetail() {
+  document.getElementById('bk-detail').classList.remove('show');
+}
+
+</script>
+</body>
+</html>
